@@ -11,17 +11,17 @@
 		"build": "webpack --config webpack.prod.js"
 	},
 	"author": {
-		"name": "Alejandro Sanchez",
-		"url": "http://alesanchezr.com/"
+		"name": "Cecilia Perdomo",
+		"url": "https://ceciliaperdomo.netlify.app/"
 	},
 	"contributors": [
 		{
-			"name": "Alejandro Sanchez",
-			"url": "http://alesanchezr.com/"
+			"name": "Cecilia Perdomo",
+			"url": "https://ceciliaperdomo.netlify.app/"
 		},
 		{
-			"name": "Ignacio Cordoba",
-			"url": "http://github.com/nachovz"
+			"name": "Cecilia Perdomo",
+			"url": "https://ceciliaperdomo.netlify.app/"
 		}
 	],
 	"license": "ISC",

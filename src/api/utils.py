@@ -33,9 +33,15 @@ def generate_sitemap(app):
     links_html = "".join(["<li><a href='" + y + "'>" + y + "</a></li>" for y in links])
     return """
         <div style="text-align: center;">
-        <img style="max-height: 80px" src='https://storage.googleapis.com/breathecode/boilerplates/rigo-baby.jpeg' />
-        <h1>Rigo welcomes you to your API!!</h1>
-        <p>API HOST: <script>document.write('<input style="padding: 5px; width: 300px" type="text" value="'+window.location.href+'" />');</script></p>
-        <p>Start working on your project by following the <a href="https://start.4geeksacademy.com/starters/full-stack" target="_blank">Quick Start</a></p>
-        <p>Remember to specify a real endpoint path like: </p>
-        <ul style="text-align: left;">"""+links_html+"</ul></div>"
+        <br>
+        <img style="max-height: 80px" src='https://scontent.fmvd1-1.fna.fbcdn.net/v/t1.6435-9/162033568_268299338077910_8571571259160410812_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=a26aad&_nc_ohc=ZkO-OFzWo9sAX8dEWgJ&_nc_ht=scontent.fmvd1-1.fna&oh=00_AfBNSPdaXmHRYkG4VEt_EnLwIMZYosKls2vcPgpDPxDKXQ&oe=63F79CE1' />
+        <h1>Activa Fitness Club</h1>
+        <p>API HOST: <br>
+            <script>document.write('<input style="padding: 5px; width: 300px; text-align: center" type="text" value="'+window.location.href+'" />');</script>
+        </p>
+        <br>
+        <p>Bienvenidos a la base de datos. <br>Aqui es donde la magia ocurre!</p>
+        <p>Realizado por <a href="">Cecilia Perdomo</a></p>
+        <br>
+        <p> Tablas: </p>
+        <ul style="text-align: center;">"""+links_html+"</ul></div>"
