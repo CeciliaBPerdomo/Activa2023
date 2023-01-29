@@ -47,13 +47,16 @@ class Usuarios(db.Model):
     activo  = db.Column(db.Boolean(), unique=False, nullable=False)
     
     # FK
-    cuota = db.Column(db.Integer, db.ForeignKey("cuota.id"))
-    mutualista = db.Column(db.Integer, db.ForeignKey("mutualista.id"))
+    cuota = db.relationship('Cuota', back_populates="usuarios")
+    idcuota = db.Column(db.Integer, db.ForeignKey("cuota.id"))
+    
+    mutualista = db.relationship('Mutualista', back_populates="usuario")
+    idmutualista = db.Column(db.Integer, db.ForeignKey("mutualista.id"))
 
-    mensualidades = db.relationship('Mensualidades', backref="mensualidades", cascade="all, delete-orphan", lazy=True)
+    mensualidades = db.relationship("Mensualidades", back_populates="usuario", cascade="all, delete-orphan", lazy=True)
 
     def __repr__(self):
-        return f'<Usuario {self.cedula}>'
+        return f'<Usuarios {self.cedula}>'
 
     def serialize(self):
         return {
@@ -75,8 +78,8 @@ class Usuarios(db.Model):
             "altura": self.altura,
             "fechaingreso": self.fechaingreso,
             "activo": self.activo,
-            "cuota": self.cuota,
-            "mutualista": self.mutualista,
+            "cuota": self.idcuota,
+            "mutualista": self.idmutualista,
         }
 
     def serializeCuotas(self):
@@ -105,8 +108,7 @@ class Cuota(db.Model):
     descripcion = db.Column(db.String(150), unique=False, nullable=False)
     precio = db.Column(db.String(10))
 
-    # FK 
-#    cuota = db.relationship('Cuota', backref="cuota", cascade="all, delete-orphan", lazy=True)
+    usuarios = db.relationship("Usuarios", back_populates="cuota", cascade="all, delete-orphan", lazy=True)
 
     def __repr__(self):
         return f'<Cuota {self.id}>'
@@ -127,7 +129,9 @@ class Mensualidades(db.Model):
     observaciones = db.Column(db.String(250))
 
     # FK 
+    usuario = db.relationship('Usuarios', back_populates="mensualidades")
     idusuario = db.Column(db.Integer, db.ForeignKey("usuarios.id"))
+    
     idmetodo = db.Column(db.Integer, db.ForeignKey("metodospago.id"))
 
     def __repr__(self):
@@ -157,7 +161,7 @@ class Metodospago(db.Model):
     observaciones = db.Column(db.String(100), unique=False)
 
     # FK 
-    # metodospago = db.relationship('MetodosPago', backref="metodospago", cascade="all, delete-orphan", lazy=True)
+    mensualidades = db.relationship('Mensualidades', backref="metodospago", cascade="all, delete-orphan", lazy=True)
 
     def __repr__(self):
         return f'<MetodosPago {self.tipo}>'
@@ -176,11 +180,11 @@ class Mutualista(db.Model):
     direccion = db.Column(db.String(120), unique=False)
     telefono = db.Column(db.String(50), unique=False)
 
-    # FK 
-    # mutualista = db.relationship('Mutualista', backref="mutualista", cascade="all, delete-orphan", lazy=True)
+    # FK
+    usuario = db.relationship("Usuarios", back_populates="mutualista", cascade="all, delete-orphan", lazy=True) 
 
     def __repr__(self):
-        return f'<Mutualista {self.tipo}>'
+        return f'<Mutualista {self.nombre}>'
 
     def serialize(self):
         return {
@@ -208,9 +212,6 @@ class Proveedores(db.Model):
     mail = db.Column(db.String(120), unique=False)
     observaciones = db.Column(db.String(120), unique=False)
 
-    # FK 
-   # proveedores = db.relationship('Proveedores', backref="proveedores", cascade="all, delete-orphan", lazy=True)
-
     def __repr__(self):
         return f'<Proveedores {self.nombre}>'
 
@@ -235,7 +236,10 @@ class Pagoproveedores(db.Model):
     observaciones = db.Column(db.String(120), unique=False)
 
     # FK 
+    proveedor = db.relationship('Proveedores', backref="pagoproveedores")
     idproveedor = db.Column(db.Integer, db.ForeignKey("proveedores.id"))
+
+    metodo = db.relationship('Metodospago', backref="pagoproveedores")
     idmetodo = db.Column(db.Integer, db.ForeignKey("metodospago.id"))
 
     def __repr__(self):
@@ -253,7 +257,7 @@ class Pagoproveedores(db.Model):
         }
 
     def serializeMetodo(self):
-        results = MetodosPago.query.filter_by(id = self.id).first()
+        results = Metodospago.query.filter_by(id = self.id).first()
         return {
             "metodosInfo": results.serialize(),
         }
@@ -269,13 +273,14 @@ class Productos(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(120), nullable=False)
     cantidad = db.Column(db.Integer, nullable=False)
-    precioventa = db.Column(db.String(10))
+    precioventa = db.Column(db.String(10), nullable=False)
     foto = db.Column(db.String(500), unique=False)
     video = db.Column(db.String(500), unique=False)
     observaciones = db.Column(db.String(500), unique=False)
 
     # FK 
-    # productos = db.relationship('Productos', backref="productos", cascade="all, delete-orphan", lazy=True)    
+    proveedor = db.relationship('Proveedores', backref="productos")
+    proveedorid = db.Column(db.Integer, db.ForeignKey("proveedores.id"))
 
     def __repr__(self):
         return f'<Productos {self.nombre}>'
@@ -289,19 +294,25 @@ class Productos(db.Model):
             "observaciones": self.observaciones, 
             "foto": self.foto, 
             "video": self.video,
+            "proveedorid": self.proveedorid,
         }
 
 # Compras
 class Compras(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    preciocompra = db.Column(db.String(10))
-    fecha = db.Column(db.Date)
+    preciocompra = db.Column(db.String(10), nullable=False)
+    fecha = db.Column(db.Date, nullable=False)
     cantidad = db.Column(db.Integer, nullable=False)
     observaciones = db.Column(db.String(500), unique=False)
 
     # FK 
+    producto = db.relationship('Productos', backref="comprar")
     idproducto = db.Column(db.Integer, db.ForeignKey("productos.id"))
+    
+    proveedor = db.relationship('Proveedores', backref="compras")
     idproveedor = db.Column(db.Integer, db.ForeignKey("proveedores.id"))
+    
+    metodo = db.relationship('Metodospago', backref="compra")
     idmetodo = db.Column(db.Integer, db.ForeignKey("metodospago.id"))
 
     def __repr__(self):
@@ -334,15 +345,20 @@ class Compras(db.Model):
 # Ventas
 class Ventas(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    fechacompra = db.Column(db.Date)
+    fechacompra = db.Column(db.Date, nullable=False)
     cantidad = db.Column(db.Integer, nullable=False)
-    preciounitario = db.Column(db.String(10))
+    preciounitario = db.Column(db.String(10), nullable=False)
     observaciones = db.Column(db.String(250), unique=False)
     fechapago  = db.Column(db.Date)
 
     # FK 
+    producto = db.relationship('Productos', backref="ventas")
     idproducto = db.Column(db.Integer, db.ForeignKey("productos.id"))
+
+    metodo = db.relationship('Metodospago', backref="venta")
     idmetodo = db.Column(db.Integer, db.ForeignKey("metodospago.id"))
+    
+    usuario = db.relationship('Usuarios', backref="vender")
     idusuario = db.Column(db.Integer, db.ForeignKey("usuarios.id"))
 
     def __repr__(self):
@@ -490,7 +506,8 @@ class Ejercicio(db.Model):
     video = db.Column(db.String(250))
 
     #FK 
-    tipo = db.Column(db.Integer, db.ForeignKey("tipoejercicio.id"))
+    tipo = db.relationship('Tipoejercicio', backref="ejercicio")
+    idtipo = db.Column(db.Integer, db.ForeignKey("tipoejercicio.id"))
 
     def __repr__(self):
         return f'<Ejercicio {self.id}>'
@@ -500,7 +517,7 @@ class Ejercicio(db.Model):
             "id": self.id,
             "nombre": self.nombre,
             "descripcion": self.descripcion,
-            "tipo": self.tipo,
+            "tipo": self.idtipo,
             "foto": self.foto, 
             "video": self.video,
         }
@@ -518,6 +535,7 @@ class Rutina(db.Model):
     fechafinalizacion = db.Column(db.Date)
 
     #FK
+    usuario = db.relationship('Usuarios', backref="rutina") 
     idusuario = db.Column(db.Integer, db.ForeignKey("usuarios.id"))
     
     def __repr__(self):
@@ -545,8 +563,11 @@ class RutinasAux(db.Model):
     repeticiones = db.Column(db.Integer)
     semana = db.Column(db.Integer)
 
-    #FK 
+    #FK
+    rutina = db.relationship('Rutina', backref="rutinasAux") 
     idrutina = db.Column(db.Integer, db.ForeignKey("rutina.id"))
+
+    ejercicio = db.relationship('Ejercicio', backref="rutinaAux")
     idejercicio = db.Column(db.Integer, db.ForeignKey("ejercicio.id"))
 
     def __repr__(self):
@@ -580,12 +601,15 @@ class RutinasAux(db.Model):
 # Carrito
 class Carrito(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    idcarrito = db.Column(db.Integer)
-    cantidad = db.Column(db.Integer)
+    idcarrito = db.Column(db.Integer, nullable=False)
+    cantidad = db.Column(db.Integer, nullable=False)
     estado = db.Column(db.String(15))
 
     #FK
+    usuario = db.relationship('Usuarios', backref="carritos")
     idusuario = db.Column(db.Integer, db.ForeignKey("usuarios.id"))
+    
+    producto = db.relationship('Productos', backref="carrito")
     idproductos = db.Column(db.Integer, db.ForeignKey("productos.id"))
     
     def __repr__(self):
@@ -617,11 +641,17 @@ class Carrito(db.Model):
 class Ventasonline(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     fechapago = db.Column(db.Date)
+    ordernumber = db.Column(db.String(25))
     observaciones = db.Column(db.String(150))
 
     #FK
+    usuario = db.relationship('Usuarios', backref="ventasonline")
     idusuario = db.Column(db.Integer, db.ForeignKey("usuarios.id"))
+    
+    carrito = db.relationship('Carrito', backref="ventaonline")
     idcarrito = db.Column(db.Integer, db.ForeignKey("carrito.id"))
+    
+    metodo = db.relationship('Metodospago', backref="online")
     idmetodo = db.Column(db.Integer, db.ForeignKey("metodospago.id"))
 
     
@@ -636,6 +666,7 @@ class Ventasonline(db.Model):
             "observaciones": self.observaciones,
             "idusuario": self.idusuario,
             "idmetodo": self.idmetodo,
+            "ordernumber": self.ordernumber,
         }
 
     def serializeUsuario(self):

@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 9cfeab4ec57d
+Revision ID: 5002e7a7c261
 Revises: 
-Create Date: 2023-01-26 18:11:13.054977
+Create Date: 2023-01-29 19:54:01.528623
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '9cfeab4ec57d'
+revision = '5002e7a7c261'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -67,16 +67,6 @@ def upgrade():
     sa.Column('telefono', sa.String(length=50), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('productos',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('nombre', sa.String(length=120), nullable=False),
-    sa.Column('cantidad', sa.Integer(), nullable=False),
-    sa.Column('precioventa', sa.String(length=10), nullable=True),
-    sa.Column('foto', sa.String(length=500), nullable=True),
-    sa.Column('video', sa.String(length=500), nullable=True),
-    sa.Column('observaciones', sa.String(length=500), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
     op.create_table('proveedores',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('nombre', sa.String(length=50), nullable=False),
@@ -101,28 +91,14 @@ def upgrade():
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email')
     )
-    op.create_table('compras',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('preciocompra', sa.String(length=10), nullable=True),
-    sa.Column('fecha', sa.Date(), nullable=True),
-    sa.Column('cantidad', sa.Integer(), nullable=False),
-    sa.Column('observaciones', sa.String(length=500), nullable=True),
-    sa.Column('idproducto', sa.Integer(), nullable=True),
-    sa.Column('idproveedor', sa.Integer(), nullable=True),
-    sa.Column('idmetodo', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['idmetodo'], ['metodospago.id'], ),
-    sa.ForeignKeyConstraint(['idproducto'], ['productos.id'], ),
-    sa.ForeignKeyConstraint(['idproveedor'], ['proveedores.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
     op.create_table('ejercicio',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('nombre', sa.String(length=100), nullable=True),
     sa.Column('descripcion', sa.String(length=1000), nullable=True),
     sa.Column('foto', sa.String(length=250), nullable=True),
     sa.Column('video', sa.String(length=250), nullable=True),
-    sa.Column('tipo', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['tipo'], ['tipoejercicio.id'], ),
+    sa.Column('idtipo', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['idtipo'], ['tipoejercicio.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('pagoproveedores',
@@ -135,6 +111,18 @@ def upgrade():
     sa.Column('idmetodo', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['idmetodo'], ['metodospago.id'], ),
     sa.ForeignKeyConstraint(['idproveedor'], ['proveedores.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('productos',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('nombre', sa.String(length=120), nullable=False),
+    sa.Column('cantidad', sa.Integer(), nullable=False),
+    sa.Column('precioventa', sa.String(length=10), nullable=False),
+    sa.Column('foto', sa.String(length=500), nullable=True),
+    sa.Column('video', sa.String(length=500), nullable=True),
+    sa.Column('observaciones', sa.String(length=500), nullable=True),
+    sa.Column('proveedorid', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['proveedorid'], ['proveedores.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('usuarios',
@@ -157,23 +145,37 @@ def upgrade():
     sa.Column('altura', sa.String(length=10), nullable=True),
     sa.Column('fechaingreso', sa.Date(), nullable=True),
     sa.Column('activo', sa.Boolean(), nullable=False),
-    sa.Column('cuota', sa.Integer(), nullable=True),
-    sa.Column('mutualista', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['cuota'], ['cuota.id'], ),
-    sa.ForeignKeyConstraint(['mutualista'], ['mutualista.id'], ),
+    sa.Column('idcuota', sa.Integer(), nullable=True),
+    sa.Column('idmutualista', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['idcuota'], ['cuota.id'], ),
+    sa.ForeignKeyConstraint(['idmutualista'], ['mutualista.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('cedula'),
     sa.UniqueConstraint('email')
     )
     op.create_table('carrito',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('idcarrito', sa.Integer(), nullable=True),
-    sa.Column('cantidad', sa.Integer(), nullable=True),
+    sa.Column('idcarrito', sa.Integer(), nullable=False),
+    sa.Column('cantidad', sa.Integer(), nullable=False),
     sa.Column('estado', sa.String(length=15), nullable=True),
     sa.Column('idusuario', sa.Integer(), nullable=True),
     sa.Column('idproductos', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['idproductos'], ['productos.id'], ),
     sa.ForeignKeyConstraint(['idusuario'], ['usuarios.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('compras',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('preciocompra', sa.String(length=10), nullable=False),
+    sa.Column('fecha', sa.Date(), nullable=False),
+    sa.Column('cantidad', sa.Integer(), nullable=False),
+    sa.Column('observaciones', sa.String(length=500), nullable=True),
+    sa.Column('idproducto', sa.Integer(), nullable=True),
+    sa.Column('idproveedor', sa.Integer(), nullable=True),
+    sa.Column('idmetodo', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['idmetodo'], ['metodospago.id'], ),
+    sa.ForeignKeyConstraint(['idproducto'], ['productos.id'], ),
+    sa.ForeignKeyConstraint(['idproveedor'], ['proveedores.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('mensualidades',
@@ -198,9 +200,9 @@ def upgrade():
     )
     op.create_table('ventas',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('fechacompra', sa.Date(), nullable=True),
+    sa.Column('fechacompra', sa.Date(), nullable=False),
     sa.Column('cantidad', sa.Integer(), nullable=False),
-    sa.Column('preciounitario', sa.String(length=10), nullable=True),
+    sa.Column('preciounitario', sa.String(length=10), nullable=False),
     sa.Column('observaciones', sa.String(length=250), nullable=True),
     sa.Column('fechapago', sa.Date(), nullable=True),
     sa.Column('idproducto', sa.Integer(), nullable=True),
@@ -226,6 +228,7 @@ def upgrade():
     op.create_table('ventasonline',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('fechapago', sa.Date(), nullable=True),
+    sa.Column('ordernumber', sa.String(length=25), nullable=True),
     sa.Column('observaciones', sa.String(length=150), nullable=True),
     sa.Column('idusuario', sa.Integer(), nullable=True),
     sa.Column('idcarrito', sa.Integer(), nullable=True),
@@ -245,15 +248,15 @@ def downgrade():
     op.drop_table('ventas')
     op.drop_table('rutina')
     op.drop_table('mensualidades')
+    op.drop_table('compras')
     op.drop_table('carrito')
     op.drop_table('usuarios')
+    op.drop_table('productos')
     op.drop_table('pagoproveedores')
     op.drop_table('ejercicio')
-    op.drop_table('compras')
     op.drop_table('user')
     op.drop_table('tipoejercicio')
     op.drop_table('proveedores')
-    op.drop_table('productos')
     op.drop_table('mutualista')
     op.drop_table('metodospago')
     op.drop_table('cuota')

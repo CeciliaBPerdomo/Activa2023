@@ -32,16 +32,17 @@ def generate_sitemap(app):
 
     links_html = "".join(["<li><a href='" + y + "'>" + y + "</a></li>" for y in links])
     return """
-        <div style="text-align: center;">
+        <div style="text-align: center">
         <br>
-        <img style="max-height: 80px" src='https://scontent.fmvd1-1.fna.fbcdn.net/v/t1.6435-9/162033568_268299338077910_8571571259160410812_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=a26aad&_nc_ohc=ZkO-OFzWo9sAX8dEWgJ&_nc_ht=scontent.fmvd1-1.fna&oh=00_AfBNSPdaXmHRYkG4VEt_EnLwIMZYosKls2vcPgpDPxDKXQ&oe=63F79CE1' />
-        <h1>Activa Fitness Club</h1>
-        <p>API HOST: <br>
+        <img style="height: 120px" src='https://scontent.fmvd1-1.fna.fbcdn.net/v/t1.6435-9/162033568_268299338077910_8571571259160410812_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=a26aad&_nc_ohc=ZkO-OFzWo9sAX8dEWgJ&_nc_ht=scontent.fmvd1-1.fna&oh=00_AfBNSPdaXmHRYkG4VEt_EnLwIMZYosKls2vcPgpDPxDKXQ&oe=63F79CE1' />
+        <h1 style="font-family: Verdana, Geneva, sans-serif; color: red">Activa Fitness Club</h1>
+        <p style="font-family: Verdana, Geneva, sans-serif">API HOST: <br>
             <script>document.write('<input style="padding: 5px; width: 300px; text-align: center" type="text" value="'+window.location.href+'" />');</script>
         </p>
         <br>
-        <p>Bienvenidos a la base de datos. <br>Aqui es donde la magia ocurre!</p>
-        <p>Realizado por <a href="">Cecilia Perdomo</a></p>
+        <p style="font-family: Verdana, Geneva, sans-serif">Bienvenidos a la base de datos. <br>Aqui es donde la magia ocurre!</p>
         <br>
-        <p> Tablas: </p>
-        <ul style="text-align: center;">"""+links_html+"</ul></div>"
+        <br>
+        <p style="font-family: Verdana, Geneva, sans-serif">Realizado por <a href="https://ceciliaperdomo.netlify.app/">Cecilia Perdomo</a></p>
+        <br>
+        <ul style="text-align: center; font-family: Verdana, Geneva, sans-serif">"""+links_html+"</ul></div>"
