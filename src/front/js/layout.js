@@ -17,6 +17,10 @@ import { ModificarCuota } from "./component/cuotas/modificarCuota.jsx"
 import { CrearMetodos } from "./component/metodospago/crearMetodos.jsx"
 import { ModificarMetodos } from "./component/metodospago/modificarMetodos.jsx"
 
+// Mutualista
+import { CrearMutualista } from "./component/mutualista/crearMutualista.jsx"
+import { ModificarMutualistas } from "./component/mutualista/modificarMutualista.jsx"
+
 //create your first component
 const Layout = () => {
     //the basename is used when your project is published in a subdirectory and not in the root of the domain
@@ -38,6 +42,10 @@ const Layout = () => {
                         {/* Metodos de pagos */}
                         <Route element={<CrearMetodos />} path="/MetodosPago" />
                         <Route element={<ModificarMetodos />} path="/ModificarMetodos/:theid" />
+
+                        {/* Mutualista */}
+                        <Route element={<CrearMutualista />} path="/Mutualista" />
+                        <Route element={<ModificarMutualistas />} path="/ModificarMutualista/:theid" />
 
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>

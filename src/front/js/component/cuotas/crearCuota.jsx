@@ -69,7 +69,7 @@ export const CrearCuota = () => {
           <input
             type="text"
             className="form-control "
-            placeholder="Buscar disciplina"
+            placeholder="🔎 Buscar disciplina"
             onChange={(e) => setBusqueda(e.target.value)}
 						value={busqueda}
           />

@@ -179,3 +179,86 @@ def get_metodo(metodo_id):
 
     metodo = id.serialize()
     return jsonify(metodo), 200
+
+#####################################################################################
+#####################################################################################
+###                                                                               ###
+###                     MUTUALISTAS                                               ###
+###                                                                               ###
+#####################################################################################
+#####################################################################################
+
+# Muestra todos las mutualistas
+@api.route('/mutualistas', methods=['GET'])
+def getMutualistas():
+    mutualista = Mutualista.query.all()
+    results = list(map(lambda x: x.serialize(), mutualista))
+    return jsonify(results), 200
+
+# Alta de una mutualista
+@api.route('/mutualistas', methods=['POST'])
+def addMutualista():
+    body = json.loads(request.data)
+
+    queryNewMutualista = Mutualista.query.filter_by(nombre=body["nombre"]).first()
+    
+    if queryNewMutualista is None:
+        new_mutualista = Mutualista(nombre=body["nombre"],
+        direccion=body["direccion"],
+        telefono=body["telefono"])
+
+        db.session.add(new_mutualista)
+        db.session.commit()
+
+        return jsonify(new_mutualista.serialize()), 200
+    
+    response_body = {"msg": "Mutualista existente"}
+    return jsonify(response_body), 400
+
+# Eliminacion de una mutualista
+@api.route('/mutualistas/<int:mutualista_id>', methods=['DELETE'])
+def deleteMutualista(mutualista_id):
+    id = Mutualista.query.filter_by(id=mutualista_id).first()
+  
+    if id is None: 
+        response_body = {"msg": "Id de mutualista no encontrada"}
+        return jsonify(response_body), 400
+
+    db.session.delete(id)
+    db.session.commit()
+    response_body = {"msg": "Mutualista borrada"}
+    return jsonify(response_body), 200 
+
+# Modifica una mutualista
+@api.route('/mutualistas/<int:mutualista_id>', methods=['PUT'])
+def modificarMutualista(mutualista_id):
+    mutualista = Mutualista.query.filter_by(id=mutualista_id).first()
+    body = json.loads(request.data)
+
+    if mutualista is None:
+        response_body = {"msg": "No existe la mutualista"}
+        return jsonify(response_body), 400    
+
+    if "nombre" in body:
+        mutualista.nombre =  body["nombre"]
+
+    if "direccion" in body:
+        mutualista.direccion = body["direccion"]
+
+    if "telefono" in body:
+        mutualista.telefono = body["telefono"]
+    
+    db.session.commit()
+    response_body = {"msg": "Mutualista modificada"}
+    return jsonify(response_body), 200
+
+# Muestra la mutualista por id
+@api.route('/mutualistas/<int:mutualista_id>', methods=['GET'])
+def get_mutualista(mutualista_id):
+    id = Mutualista.query.filter_by(id=mutualista_id).first()
+
+    if id is None: 
+        response_body = {"msg": "Mutualista no encontrada"}
+        return jsonify(response_body), 400
+
+    return jsonify(id.serialize()), 200

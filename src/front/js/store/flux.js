@@ -8,6 +8,8 @@ const getState = ({ getStore, getActions, setStore }) => {
       cuota: {},
       metodos: [],
       metodo: {},
+      mutualistas: [],
+      mutualista: {},
     },
     actions: {
       ////////////////////////////////////
@@ -191,6 +193,100 @@ const getState = ({ getStore, getActions, setStore }) => {
         });
         setStore({
           metodos: resultados,
+        });
+      },
+
+      ////////////////////////////////////
+      //       Mutualista              ///
+      ////////////////////////////////////
+      /* Listar las Mutualistas */
+      obtenerMutualistas: async () => {
+        try {
+          const response = await axios.get(direccion + "/api/mutualistas", {});
+          setStore({
+            mutualistas: response.data,
+          });
+        } catch (error) {
+          if (error.code === "ERR_BAD_REQUEST") {
+            console.log(error.response.data.msg);
+          }
+        }
+      },
+
+      /* Crea Mutualista */
+      crearMutualista: async (nombre, direccionMutualista, telefono) => {
+        try {
+            await axios.post(direccion + "/api/mutualistas", {
+            nombre: nombre,
+            direccion: direccionMutualista,
+            telefono: telefono
+          });
+          getActions().obtenerMutualistas();
+          return true;
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+      /* Borrar mutualistas */
+      borrarMutualista: async (id) => {
+        try {
+          await axios.delete(direccion + "/api/mutualistas/" + id, {});
+          getActions().obtenerMutualistas();
+          return true;
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+      // Obtener metodo por id
+      obtenerMutualistaId: async (id) => {
+        try {
+          const response = await axios.get(
+            direccion + "/api/mutualistas/" + id,
+            {},
+          );
+          setStore({
+            mutualista: response.data,
+          });
+        } catch (error) {
+          if (error.code === "ERR_BAD_REQUEST") {
+            console.log(error.response.data.msg);
+          }
+        }
+      },
+
+      // Modificar mutualista
+      modificarMutualista: async (id, nombre, direccionMutualista, telefono) => {
+        try {
+          await axios.put(direccion + "/api/mutualistas/" + id, {
+            id: id,
+            nombre: nombre,
+            direccion: direccionMutualista,
+            telefono: telefono
+          });
+          return true;
+        } catch (error) {
+          if (error.code === "ERR_BAD_REQUEST") {
+            console.log(error.response.data.msg);
+          }
+        }
+      },
+
+      // Buscador de metodos
+      buscadorMutualista: (valor) => {
+        let store = getStore();
+        let resultados = store.mutualistas.filter((item) => {
+          if (
+            item.nombre.toString().toLowerCase().includes(
+              valor.toLowerCase(),
+              )
+              ) {
+            return valor;
+          }
+        });
+        setStore({
+          mutualistas: resultados,
         });
       },
 

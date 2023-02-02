@@ -4,23 +4,24 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export const CrearMetodos = () => {
+export const CrearMutualista = () => {
   const { store, actions } = useContext(Context);
   let navegacion = useNavigate();
 
-  const [busqueda, setBusqueda] = useState("");
-  const [tipo, setTipo] = useState("");
-  const [observaciones, setObservaciones] = useState("");
+  const [nombre, setNombre] = useState("");
+  const [direccion, setDireccion] = useState("");
+  const [telefono, setTelefono] = useState("")
 
+  const [busqueda, setBusqueda] = useState("");
 
   useEffect(() => {
-    actions.obtenerMetodos();
+    actions.obtenerMutualistas();
   }, []);
 
   const guardar = (e) => {
     e.preventDefault();
 
-    if (actions.crearMetodos(tipo, observaciones)) {
+    if (actions.crearMutualista(nombre, direccion, telefono)) {
       toast.success("💪 Guardado con éxito", {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 3000,
@@ -33,13 +34,14 @@ export const CrearMetodos = () => {
       });
     }
     /* Limpiar el formulario */
-    setTipo("");
-    setObservaciones("");
+    setNombre("");
+    setDireccion("");
+    setTelefono("")
   };
 
   const borrar = (e, id) => {
     e.preventDefault();
-    if (actions.borrarMetodos(id)) {
+    if (actions.borrarMutualista(id)) {
       toast.error("🤚 Borrado con éxito", {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 3000,
@@ -53,15 +55,14 @@ export const CrearMetodos = () => {
     }
   };
 
-   // Buscador
-   const buscar = async (valor) => {
-       if (busqueda === "") {
-           actions.obtenerMetodos();
-        } else {
-      await actions.buscadorMetodos(valor);
-    }
-  };
-
+  // Buscador
+  const buscar = async (valor) => {
+    if (busqueda === "") {
+        actions.obtenerMutualistas();
+     } else {
+   await actions.buscadorMutualista(valor);
+ }
+};
 
   return (
     <>
@@ -70,7 +71,7 @@ export const CrearMetodos = () => {
           <input
             type="text"
             className="form-control "
-            placeholder="🔎 Buscar método de pago"
+            placeholder="🔎 Buscar mutualista..."
             onChange={(e) => setBusqueda(e.target.value)}
             value={busqueda}
           />
@@ -84,7 +85,7 @@ export const CrearMetodos = () => {
           </button>
         </div>
 
-        <h3 style={{ marginBottom: "25px" }}>Métodos de pago</h3>
+        <h3 style={{ marginBottom: "25px" }}>Mutualistas</h3>
         <hr />
         <br />
 
@@ -92,29 +93,52 @@ export const CrearMetodos = () => {
         <form>
           <div className="row">
             <div className="col">
-              <label htmlFor="descripcion" style={{ marginBottom: "10px" }}>
-                Tipo:
+              <label htmlFor="Nombre:" style={{ marginBottom: "10px" }}>
+                Nombre:
               </label>
               <input
                 type="text"
                 className="form-control"
-                placeholder="Tipo"
-                value={tipo}
-                onChange={(e) => setTipo(e.target.value)}
+                placeholder="Nombre"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
               />
             </div>
+          </div>
+
+          <br />
+          <div className="row">
             <div className="col">
-              <label htmlFor="precio" style={{ marginBottom: "10px" }}>
-                Observaciones:
+              <label htmlFor="Direccion" style={{ marginBottom: "10px" }}>
+                Dirección:
               </label>
               <input
                 type="text"
                 className="form-control"
-                placeholder="Observaciones"
-                value={observaciones}
-                onChange={(e) => setObservaciones(e.target.value)}
+                placeholder="Dirección"
+                value={direccion}
+                onChange={(e) => setDireccion(e.target.value)}
               />
             </div>
+          </div>
+
+          <br />
+          <div className="row">
+            <div className="col">
+              <label htmlFor="Telefono" style={{ marginBottom: "10px" }}>
+                Teléfono:
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Teléfono"
+                value={telefono}
+                onChange={(e) => setTelefono(e.target.value)}
+              />
+            </div>
+          </div>
+          <br />
+          <div className="row">
             <div style={{ marginTop: "15px" }}>
               <button
                 type="submit"
@@ -127,31 +151,34 @@ export const CrearMetodos = () => {
           </div>
         </form>
 
-        {/* Listado de métodos de pago */}
+
+        {/* Listado de mutualista */}
         <div style={{ marginTop: "35px" }}>
           <table className="table" style={{ color: "white" }}>
             <thead>
               <tr>
-                <th scope="col">Tipo</th>
-                <th scope="col">Observaciones</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Dirección</th>
+                <th scope="col">Teléfono</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
-              {store.metodos.map((item, id) => ( 
+              {store.mutualistas.map((item, id) => ( 
                 <tr key={id}>
-                  <td>{item.tipo}</td>
-                  <td>{item.observaciones}</td>
+                  <td>{item.nombre}</td>
+                  <td>{item.direccion}</td>
+                  <td>{item.telefono}</td>
                   <td>
-                    <Link to={"/ModificarMetodos/" + item.id} style={{color: "white"}}> 
+                    <Link to={"/ModificarMutualista/" + item.id} style={{color: "white"}}> 
                       <i className="fa fa-pen"></i>
                      </Link>
                   </td>
                   <td>
                     <i
                       className="fa fa-trash"
-                      onClick={(e) => borrar(e, item.id)}
+                     onClick={(e) => borrar(e, item.id)}
                     >
                     </i>
                   </td>
@@ -160,7 +187,6 @@ export const CrearMetodos = () => {
             </tbody>
           </table>
         </div>
-      
       </div>
       <ToastContainer />
       <br />
