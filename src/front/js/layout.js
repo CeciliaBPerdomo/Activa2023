@@ -21,6 +21,9 @@ import { ModificarMetodos } from "./component/metodospago/modificarMetodos.jsx"
 import { CrearMutualista } from "./component/mutualista/crearMutualista.jsx"
 import { ModificarMutualistas } from "./component/mutualista/modificarMutualista.jsx"
 
+// Alumnos
+import { CrearAlumno } from "./component/alumnos/crearAlumno.jsx"
+
 //create your first component
 const Layout = () => {
     //the basename is used when your project is published in a subdirectory and not in the root of the domain
@@ -46,6 +49,9 @@ const Layout = () => {
                         {/* Mutualista */}
                         <Route element={<CrearMutualista />} path="/Mutualista" />
                         <Route element={<ModificarMutualistas />} path="/ModificarMutualista/:theid" />
+
+                        {/* Alumnos */}
+                        <Route element={<CrearAlumno />} path="/CrearAlumno" />
 
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>

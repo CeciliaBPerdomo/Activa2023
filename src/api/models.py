@@ -30,6 +30,7 @@ class Usuarios(db.Model):
     cedula = db.Column(db.Integer, unique=True, nullable=False)
     nombre = db.Column(db.String(50), unique=False, nullable=False)
     apellido = db.Column(db.String(50), unique=False, nullable=False)
+    direccion = db.Column(db.String(120), unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     fechanacimiento = db.Column(db.Date, unique=False)
     condicionesmedicas = db.Column(db.String(200))
@@ -64,6 +65,7 @@ class Usuarios(db.Model):
             "cedula": self.cedula,
             "nombre": self.nombre,
             "apellido": self.apellido, 
+            "direccion": self.direccion,
             "email": self.email,
             "fechanacimiento": self.fechanacimiento,
             "condicionesmedicas": self.condicionesmedicas, 
