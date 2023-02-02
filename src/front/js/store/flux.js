@@ -6,9 +6,14 @@ const getState = ({ getStore, getActions, setStore }) => {
     store: {
       cuotas: [],
       cuota: {},
+      metodos: [],
+      metodo: {},
     },
     actions: {
-      // Cuotas
+      ////////////////////////////////////
+      //          Cuotas              ///
+      ////////////////////////////////////
+      /* Listar las cuotas*/
       obtenerCuotas: async () => {
         try {
           const response = await axios.get(direccion + "/api/cuota", {});
@@ -52,8 +57,11 @@ const getState = ({ getStore, getActions, setStore }) => {
       buscadorCuota: (valor) => {
         let store = getStore();
         let resultados = store.cuotas.filter((item) => {
-          if (item.descripcion.toString().toLowerCase().includes(
-              valor.toLowerCase())) {
+          if (
+            item.descripcion.toString().toLowerCase().includes(
+              valor.toLowerCase(),
+            )
+          ) {
             return valor;
           }
         });
@@ -65,34 +73,126 @@ const getState = ({ getStore, getActions, setStore }) => {
       // Obtener cuota por id
       obtenerCuotaId: async (id) => {
         try {
-            const response = await axios.get(direccion + "/api/cuota/" + id, {});
-            setStore({
-                cuota: response.data,
-            });
+          const response = await axios.get(direccion + "/api/cuota/" + id, {});
+          setStore({
+            cuota: response.data,
+          });
         } catch (error) {
-            if (error.code === "ERR_BAD_REQUEST") {
-                console.log(error.response.data.msg);
-            }
-        }
-      },
-
-      modificarCuota: async(id, descripcion, precio) => {
-        try {
-          const response = await axios.put(direccion + "/api/cuota/"+ id, {
-            id: id,
-            descripcion: descripcion,
-            precio: precio
-          })
-          //console.log(response.data)
-          return true
-        } catch(error){
           if (error.code === "ERR_BAD_REQUEST") {
             console.log(error.response.data.msg);
           }
         }
       },
 
+      // Modificar cuota
+      modificarCuota: async (id, descripcion, precio) => {
+        try {
+          const response = await axios.put(direccion + "/api/cuota/" + id, {
+            id: id,
+            descripcion: descripcion,
+            precio: precio,
+          });
+          //console.log(response.data)
+          return true;
+        } catch (error) {
+          if (error.code === "ERR_BAD_REQUEST") {
+            console.log(error.response.data.msg);
+          }
+        }
+      },
 
+      ////////////////////////////////////
+      //     Metodos de pago           ///
+      ////////////////////////////////////
+      /* Listar las Metodos*/
+      obtenerMetodos: async () => {
+        try {
+          const response = await axios.get(direccion + "/api/metodos", {});
+          setStore({
+            metodos: response.data,
+          });
+        } catch (error) {
+          console.log(error);
+          if (error.code === "ERR_BAD_REQUEST") {
+            console.log(error.response.data.msg);
+          }
+        }
+      },
+
+      /* Crea Metodos */
+      crearMetodos: async (tipo, observaciones) => {
+        try {
+          await axios.post(direccion + "/api/metodos", {
+            tipo: tipo,
+            observaciones: observaciones,
+          });
+          getActions().obtenerMetodos();
+          return true;
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+      /* Borrar metodos */
+      borrarMetodos: async (id) => {
+        try {
+          await axios.delete(direccion + "/api/metodos/" + id, {});
+          getActions().obtenerMetodos();
+          return true;
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+      // Obtener metodo por id
+      obtenerMetodoId: async (id) => {
+        try {
+          const response = await axios.get(
+            direccion + "/api/metodos/" + id,
+            {},
+          );
+          setStore({
+            metodo: response.data,
+          });
+        } catch (error) {
+          if (error.code === "ERR_BAD_REQUEST") {
+            console.log(error.response.data.msg);
+          }
+        }
+      },
+
+      // Modificar metodo
+      modificarMetodo: async (id, tipo, observaciones) => {
+        try {
+          await axios.put(direccion + "/api/metodos/" + id, {
+            id: id,
+            tipo: tipo,
+            observaciones: observaciones,
+          });
+          return true;
+        } catch (error) {
+          if (error.code === "ERR_BAD_REQUEST") {
+            console.log(error.response.data.msg);
+          }
+        }
+      },
+
+      // Buscador de metodos
+      buscadorMetodos: (valor) => {
+        let store = getStore();
+        let resultados = store.metodos.filter((item) => {
+          if (
+            item.tipo.toString().toLowerCase().includes(
+              valor.toLowerCase(),
+              )
+              ) {
+            return valor;
+          }
+        });
+        setStore({
+          metodos: resultados,
+        });
+      },
 
       getMessage: async () => {
         try {

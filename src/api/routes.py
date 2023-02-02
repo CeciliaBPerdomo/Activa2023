@@ -24,7 +24,7 @@ def handle_hello():
 #####################################################################################
 #####################################################################################
 ###                                                                               ###
-###                     FACTURACION                                               ###
+###                        CUOTAS                                                 ###
 ###                                                                               ###
 #####################################################################################
 #####################################################################################
@@ -100,3 +100,82 @@ def get_cuota(cuota_id):
 
     cuota = id.serialize()
     return jsonify(cuota), 200
+
+#####################################################################################
+#####################################################################################
+###                                                                               ###
+###                     METODOS DE PAGO                                           ###
+###                                                                               ###
+#####################################################################################
+#####################################################################################
+
+# Muestra todos los metodos de pagos
+@api.route('/metodos', methods=['GET'])
+def getMetodos():
+    metodos = Metodospago.query.all()
+    results = list(map(lambda x: x.serialize(), metodos))
+    return jsonify(results), 200
+
+# Alta de un metodos de pago
+@api.route('/metodos', methods=['POST'])
+def addMetodo():
+    body = json.loads(request.data)
+
+    queryNewMetodo = Metodospago.query.filter_by(tipo=body["tipo"]).first()
+    if queryNewMetodo is None:
+        new_metodo = Metodospago(tipo=body["tipo"],
+        observaciones=body["observaciones"])
+
+        db.session.add(new_metodo)
+        db.session.commit()
+
+        return jsonify(new_metodo.serialize()), 200
+    
+    response_body = {"msg": "Metodo de pago ya creado"}
+    return jsonify(response_body), 400
+
+# Eliminacion de un metodo de pago
+@api.route('/metodos/<int:metodos_id>', methods=['DELETE'])
+def deleteMetodos(metodos_id):
+    MetodosId = Metodospago.query.filter_by(id=metodos_id).first()
+  
+    if MetodosId is None: 
+        response_body = {"msg": "Id de metodo de pago no encontrada"}
+        return jsonify(response_body), 400
+
+    db.session.delete(MetodosId)
+    db.session.commit()
+    response_body = {"msg": "Metodo de pago borrado"}
+    return jsonify(response_body), 200 
+
+# Modifica un metodo de pago por id
+@api.route('/metodos/<int:metodos_id>', methods=['PUT'])
+def modificarMetodos(metodos_id):
+    metodos = Metodospago.query.filter_by(id=metodos_id).first()
+    body = json.loads(request.data)
+
+    if metodos is None:
+        response_body = {"msg": "No existe el metodo de pago"}
+        return jsonify(response_body), 400    
+
+    if "tipo" in body:
+        metodos.tipo =  body["tipo"]
+
+    if "observaciones" in body:
+        metodos.observaciones = body["observaciones"]
+    
+    db.session.commit()
+    response_body = {"msg": "Metodo de pago modificado"}
+    return jsonify(response_body), 200
+
+# Muestra el metodo de pago por id
+@api.route('/metodos/<int:metodo_id>', methods=['GET'])
+def get_metodo(metodo_id):
+    id = Metodospago.query.filter_by(id=metodo_id).first()
+
+    if id is None: 
+        response_body = {"msg": "Metodo de pago no encontrado"}
+        return jsonify(response_body), 400
+
+    metodo = id.serialize()
+    return jsonify(metodo), 200
