@@ -4,14 +4,66 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+/*
+ cedula, nombre, apellido, direccionAlumno,
+ celular, fechanacimiento, peso, altura,
+  email, idmutualista, condicionesmedicas, medicacion,
+  emergencias, motivoentrenamiento, idcuota,
+  rol, activo, observaciones,
+*/
+
 export const CrearAlumno = () => {
   const { store, actions } = useContext(Context);
   let navegacion = useNavigate();
+
+  const [cedula, setCedula] = useState("");
+  const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
+  const [direccion, setDireccion] = useState("");
+  const [celular, setCelular] = useState("");
+  const [fechanacimiento, setFechaNacimiento] = useState("");
+  const [peso, setPeso] = useState("");
+  const [altura, setAltura] = useState("");
+  const [email, setEmail] = useState("");
+  const [mutualista, setMutualista] = useState("");
+  const [condiciones, setCondiciones] = useState("");
+  const [medicacion, setMedicacion] = useState("");
+  const [emergencias, setEmergencias] = useState("");
+  const [motivo, setMotivo] = useState("");
+  const [cuota, setCuota] = useState("");
+  const [rol, setRol] = useState("");
+  const [activo, setActivo] = useState("");
+  const [observaciones, setObservaciones] = useState("");
+  const [ingreso, setIngreso] = useState("");
+  const [foto, setFoto] = useState("");
 
   useEffect(() => {
     actions.obtenerCuotas();
     actions.obtenerMutualistas();
   }, []);
+
+  const guardar = (e) => {
+    e.preventDefault();
+    console.log(mutualista)
+
+    if (actions.crearAlumnos(cedula, nombre, apellido, direccion, celular, fechanacimiento, peso, altura, email, mutualista, condiciones, medicacion, emergencias, motivo, cuota, rol, activo, observaciones, ingreso, foto)) {
+      toast.success("💪 Guardado con éxito", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+    
+    setInterval(() => {
+      navegacion("/ListadoAlumnos");
+  }, 5000);
+  };
+
 
   return (
     <>
@@ -22,6 +74,7 @@ export const CrearAlumno = () => {
 
         <form>
           <div className="row">
+            {/* Cedula */}
             <div className="col">
               <label htmlFor="cedula" style={{ marginBottom: "10px" }}>
                 Cédula:
@@ -30,11 +83,12 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Cédula (sin puntos ni guiones)"
-                // value={descripcion}
-                // onChange={(e) => setDescripcion(e.target.value)}
+                value={cedula}
+                onChange={(e) => setCedula(e.target.value)}
               />
             </div>
 
+            {/* Nombre */}
             <div className="col">
               <label htmlFor="nombre" style={{ marginBottom: "10px" }}>
                 Nombre:
@@ -43,11 +97,12 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Nombre"
-                // value={precio}
-                // onChange={(e) => setPrecio(e.target.value)}
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
               />
             </div>
 
+            {/* Apellido */}
             <div className="col">
               <label htmlFor="apellido" style={{ marginBottom: "10px" }}>
                 Apellido:
@@ -56,14 +111,15 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Apellido"
-                // value={precio}
-                // onChange={(e) => setPrecio(e.target.value)}
+                value={apellido}
+                onChange={(e) => setApellido(e.target.value)}
               />
             </div>
           </div>
 
           <br />
           <div className="row">
+            {/* Direccion */}
             <div className="col">
               <label htmlFor="direccion" style={{ marginBottom: "10px" }}>
                 Dirección:
@@ -72,11 +128,12 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Dirección"
-                // value={descripcion}
-                // onChange={(e) => setDescripcion(e.target.value)}
+                value={direccion}
+                onChange={(e) => setDireccion(e.target.value)}
               />
             </div>
 
+            {/* Celular */}
             <div className="col">
               <label htmlFor="Celular" style={{ marginBottom: "10px" }}>
                 Celular:
@@ -85,11 +142,12 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Celular"
-                // value={precio}
-                // onChange={(e) => setPrecio(e.target.value)}
+                value={celular}
+                onChange={(e) => setCelular(e.target.value)}
               />
             </div>
 
+            {/* Fecha de nacimiento */}
             <div className="col">
               <label htmlFor="fecha" style={{ marginBottom: "10px" }}>
                 Fecha de nacimiento:
@@ -98,14 +156,15 @@ export const CrearAlumno = () => {
                 type="date"
                 className="form-control"
                 placeholder="Fecha de nacimiento"
-                // value={descripcion}
-                // onChange={(e) => setDescripcion(e.target.value)}
+                value={fechanacimiento}
+                onChange={(e) => setFechaNacimiento(e.target.value)}
               />
             </div>
           </div>
 
           <br />
           <div className="row">
+            {/* Peso */}
             <div className="col">
               <label htmlFor="Peso" style={{ marginBottom: "10px" }}>
                 Peso:
@@ -114,11 +173,12 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Peso"
-                // value={precio}
-                // onChange={(e) => setPrecio(e.target.value)}
+                value={peso}
+                onChange={(e) => setPeso(e.target.value)}
               />
             </div>
 
+            {/* Altura */}
             <div className="col">
               <label htmlFor="Altura" style={{ marginBottom: "10px" }}>
                 Altura:
@@ -127,11 +187,12 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Altura"
-                // value={precio}
-                // onChange={(e) => setPrecio(e.target.value)}
+                value={altura}
+                onChange={(e) => setAltura(e.target.value)}
               />
             </div>
 
+            {/* Fecha de ingreso */}
             <div className="col">
               <label htmlFor="fechaI" style={{ marginBottom: "10px" }}>
                 Fecha de ingreso:
@@ -140,14 +201,15 @@ export const CrearAlumno = () => {
                 type="date"
                 className="form-control"
                 placeholder="Fecha de ingreso"
-                // value={descripcion}
-                // onChange={(e) => setDescripcion(e.target.value)}
+                value={ingreso}
+                onChange={(e) => setIngreso(e.target.value)}
               />
             </div>
           </div>
 
           <br />
           <div className="row">
+            {/* E-mail */}
             <div className="col">
               <label htmlFor="mail" style={{ marginBottom: "10px" }}>
                 Correo electrónico:
@@ -156,11 +218,12 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Correo electrónico"
-                // value={precio}
-                // onChange={(e) => setPrecio(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
+            {/* Foto */}
             <div className="col">
               <label htmlFor="foto" style={{ marginBottom: "10px" }}>
                 Foto:
@@ -169,11 +232,12 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Foto (URL)"
-                // value={precio}
-                // onChange={(e) => setPrecio(e.target.value)}
+                value={foto}
+                onChange={(e) => setFoto(e.target.value)}
               />
             </div>
 
+            {/* Mutualista */}
             <div className="col">
               <label htmlFor="mutualista" style={{ marginBottom: "10px" }}>
                 Mutualista:
@@ -181,6 +245,8 @@ export const CrearAlumno = () => {
               <select
                 className="form-select"
                 aria-label="Default select example"
+                value={mutualista}
+                onChange={(e) => setMutualista(e.target.value)}
               >
                 <option selected>Mutualista</option>
                 {store.mutualistas.map((item, id) => (
@@ -192,6 +258,7 @@ export const CrearAlumno = () => {
 
           <br />
           <div className="row">
+            {/* Condiciones medicas */}
             <div className="col">
               <label htmlFor="condiciones" style={{ marginBottom: "10px" }}>
                 Condiciones médicas:
@@ -200,11 +267,12 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Condiciones médicas"
-                // value={descripcion}
-                // onChange={(e) => setDescripcion(e.target.value)}
+                value={condiciones}
+                onChange={(e) => setCondiciones(e.target.value)}
               />
             </div>
 
+            {/* Medicaciones */}
             <div className="col">
               <label htmlFor="medicacion" style={{ marginBottom: "10px" }}>
                 Medicación:
@@ -213,11 +281,12 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Si toma algún médicamento"
-                // value={precio}
-                // onChange={(e) => setPrecio(e.target.value)}
+                value={medicacion}
+                onChange={(e) => setMedicacion(e.target.value)}
               />
             </div>
 
+            {/* Emergencias */}
             <div className="col">
               <label htmlFor="emergencias" style={{ marginBottom: "10px" }}>
                 Emergencias:
@@ -226,14 +295,15 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Telefono en caso de emergencia"
-                // value={precio}
-                // onChange={(e) => setPrecio(e.target.value)}
+                value={emergencias}
+                onChange={(e) => setEmergencias(e.target.value)}
               />
             </div>
           </div>
 
           <br />
           <div className="row">
+            {/* Motivo */}
             <div className="col">
               <label htmlFor="motivo" style={{ marginBottom: "10px" }}>
                 Motivo del entrenamiento:
@@ -242,11 +312,12 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Motivo del entrenamiento"
-                // value={precio}
-                // onChange={(e) => setPrecio(e.target.value)}
+                value={motivo}
+                onChange={(e) => setMotivo(e.target.value)}
               />
             </div>
 
+            {/* Modalidad */}
             <div className="col">
               <label htmlFor="entrenamiento" style={{ marginBottom: "10px" }}>
                 Modalidad:
@@ -254,12 +325,14 @@ export const CrearAlumno = () => {
               <select
                 className="form-select"
                 aria-label="Default select example"
+                value={cuota}
+                onChange={(e) => setCuota(e.target.value)}
               >
                 <option>Modalidad</option>
                 {store.cuotas.map((item, id) => (
                   <option
                     key={id}
-                    //value={item.id}
+                    value={item.id}
                   >
                     {item.descripcion}
                   </option>
@@ -283,11 +356,62 @@ export const CrearAlumno = () => {
           </div>
 
           <br />
+          <div className="row">
+            {/* Rol */}
+            <div className="col">
+              <label htmlFor="rol" style={{ marginBottom: "10px" }}>
+                Rol:
+              </label>
+              <select
+                className="form-select"
+                aria-label="Default select example"
+                value={rol}
+                onChange={(e) => setRol(e.target.value)}
+              >
+                <option>Rol</option>
+                <option value="Alumno">Alumno</option>
+                <option value="Administrador">Administrador</option>
+              </select>
+            </div>
+
+            {/* Estado */}
+            <div className="col">
+              <label htmlFor="Estado" style={{ marginBottom: "10px" }}>
+                Estado:
+              </label>
+              <select
+                className="form-select"
+                aria-label="Default select example"
+                value={activo}
+                onChange={(e) => setActivo(e.target.value)}
+              >
+                <option>Estado</option>
+                <option value="Activo">Activo</option>
+                <option value="Inactivo">Inactivo</option>
+              </select>
+            </div>
+
+            {/* Observaciones */}
+            <div className="col">
+              <label htmlFor="observaciones" style={{ marginBottom: "10px" }}>
+                Observaciones:
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Observaciones"
+                value={observaciones}
+                onChange={(e) => setObservaciones(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <br />
           <div style={{ marginTop: "15px" }}>
             <button
               type="submit"
               className="btn btn-outline-danger float-end w-25"
-              //onClick={(e) => guardar(e)}
+              onClick={(e) => guardar(e)}
             >
               Agregar
             </button>

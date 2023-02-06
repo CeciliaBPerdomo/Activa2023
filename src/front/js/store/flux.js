@@ -10,6 +10,8 @@ const getState = ({ getStore, getActions, setStore }) => {
       metodo: {},
       mutualistas: [],
       mutualista: {},
+      alumnos: [],
+      alumno: {},
     },
     actions: {
       ////////////////////////////////////
@@ -186,8 +188,8 @@ const getState = ({ getStore, getActions, setStore }) => {
           if (
             item.tipo.toString().toLowerCase().includes(
               valor.toLowerCase(),
-              )
-              ) {
+            )
+          ) {
             return valor;
           }
         });
@@ -216,10 +218,10 @@ const getState = ({ getStore, getActions, setStore }) => {
       /* Crea Mutualista */
       crearMutualista: async (nombre, direccionMutualista, telefono) => {
         try {
-            await axios.post(direccion + "/api/mutualistas", {
+          await axios.post(direccion + "/api/mutualistas", {
             nombre: nombre,
             direccion: direccionMutualista,
-            telefono: telefono
+            telefono: telefono,
           });
           getActions().obtenerMutualistas();
           return true;
@@ -257,13 +259,18 @@ const getState = ({ getStore, getActions, setStore }) => {
       },
 
       // Modificar mutualista
-      modificarMutualista: async (id, nombre, direccionMutualista, telefono) => {
+      modificarMutualista: async (
+        id,
+        nombre,
+        direccionMutualista,
+        telefono,
+      ) => {
         try {
           await axios.put(direccion + "/api/mutualistas/" + id, {
             id: id,
             nombre: nombre,
             direccion: direccionMutualista,
-            telefono: telefono
+            telefono: telefono,
           });
           return true;
         } catch (error) {
@@ -273,15 +280,15 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
 
-      // Buscador de metodos
+      // Buscador de mutualista
       buscadorMutualista: (valor) => {
         let store = getStore();
         let resultados = store.mutualistas.filter((item) => {
           if (
             item.nombre.toString().toLowerCase().includes(
               valor.toLowerCase(),
-              )
-              ) {
+            )
+          ) {
             return valor;
           }
         });
@@ -289,6 +296,106 @@ const getState = ({ getStore, getActions, setStore }) => {
           mutualistas: resultados,
         });
       },
+
+      ////////////////////////////////////
+      //       Alumnos                 ///
+      ////////////////////////////////////
+      /* Listar los Alumnos */
+      obtenerAlumnos: async () => {
+        try {
+          const response = await axios.get(direccion + "/api/alumnos", {});
+          setStore({
+            alumnos: response.data,
+          });
+        } catch (error) {
+          if (error.code === "ERR_BAD_REQUEST") {
+            console.log(error.response.data.msg);
+          }
+        }
+      },
+
+      /* Crea Alumnos */
+      crearAlumnos: async (
+        cedula,
+        nombre,
+        apellido,
+        direccionAlumno,
+        celular,
+        fechanacimiento,
+        peso,
+        altura,
+        email,
+        idmutualista,
+        condicionesmedicas,
+        medicacion,
+        emergencias,
+        motivoentrenamiento,
+        idcuota,
+        rol,
+        activo,
+        observaciones,
+        fechaingreso,
+        foto
+      ) => {
+        try {
+          await axios.post(direccion + "/api/alumnos", {
+            cedula: cedula,
+            nombre: nombre,
+            apellido: apellido,
+            direccion: direccionAlumno,
+            email: email,
+            fechanacimiento: fechanacimiento,
+            condicionesmedicas: condicionesmedicas,
+            medicacion: medicacion,
+            emergencias: emergencias,
+            password: cedula,
+            rol: rol,
+            motivoentrenamiento: motivoentrenamiento,
+            observaciones: observaciones,
+            foto: foto,
+            celular: celular,
+            peso: peso,
+            altura: altura,
+            fechaingreso: fechaingreso,
+            activo: activo,
+            idcuota: idcuota,
+            idmutualista: idmutualista,
+          });
+          return true;
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+      /* Borrar alumno */
+      borrarAlumno: async (id) => {
+        try {
+          await axios.delete(direccion + "/api/alumnos/" + id, {});
+          getActions().obtenerAlumnos();
+          return true;
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+            // Buscador de alumno
+            buscadorAlumno: (valor) => {
+              let store = getStore();
+              let resultados = store.alumnos.filter((item) => {
+                if (
+                  item.nombre.toString().toLowerCase().includes(
+                    valor.toLowerCase(),
+                  )
+                ) {
+                  return valor;
+                }
+              });
+              setStore({
+                alumnos: resultados,
+              });
+            },
+      
+
 
       getMessage: async () => {
         try {

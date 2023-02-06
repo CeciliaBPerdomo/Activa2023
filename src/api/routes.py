@@ -262,3 +262,72 @@ def get_mutualista(mutualista_id):
         return jsonify(response_body), 400
 
     return jsonify(id.serialize()), 200
+
+#####################################################################################
+#####################################################################################
+###                                                                               ###
+###                     ALUMNOS                                                   ###
+###                                                                               ###
+#####################################################################################
+#####################################################################################
+
+# Muestra todos los alumnos
+@api.route('/alumnos', methods=['GET'])
+def getAlumos():
+    alumnos = Usuarios.query.all()
+    results = list(map(lambda x: {**x.serializeCuotas(), **x.serialize()}, alumnos))
+    return jsonify(results), 200
+
+# Alta de un alumno 
+@api.route('/alumnos', methods=['POST'])
+def addAlumnos():
+    body = json.loads(request.data)
+
+    queryNewAlumno = Usuarios.query.filter_by(cedula=body["cedula"]).first()
+    
+    if queryNewAlumno is None:
+        new_alumno = Usuarios(
+        cedula=body["cedula"],
+        nombre=body["nombre"],
+        apellido=body["apellido"],
+        direccion=body["direccion"],
+        celular=body["celular"],
+        fechanacimiento=body["fechanacimiento"],
+        peso=body["peso"],
+        altura=body["altura"], 
+        fechaingreso=body["fechaingreso"],
+        password=body["cedula"], 
+        email=body["email"], 
+        idmutualista=body["idmutualista"],
+        condicionesmedicas=body["condicionesmedicas"], 
+        medicacion=body["medicacion"],
+        emergencias=body["emergencias"], 
+        motivoentrenamiento=body["motivoentrenamiento"],
+        idcuota=body["idcuota"],
+        rol=body["rol"],
+        activo=body["activo"],
+        observaciones=body["observaciones"],
+        )
+
+        db.session.add(new_alumno)
+        db.session.commit()
+
+        return jsonify(new_alumno.serialize()), 200
+    
+    response_body = {"msg": "Este usuario ya existente"}
+    return jsonify(response_body), 400
+
+# Elimina un alumno
+@api.route('/alumnos/<int:alumno_id>', methods=['DELETE'])
+def deleteAlumno(alumno_id):
+    id = Usuarios.query.filter_by(id=alumno_id).first()
+  
+    if id is None: 
+        response_body = {"msg": "Id de alumno no encontrado"}
+        return jsonify(response_body), 400
+
+    db.session.delete(id)
+    db.session.commit()
+
+    response_body = {"msg": "Alumno borrado"}
+    return jsonify(response_body), 200 

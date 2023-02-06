@@ -32,7 +32,7 @@ class Usuarios(db.Model):
     apellido = db.Column(db.String(50), unique=False, nullable=False)
     direccion = db.Column(db.String(120), unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    fechanacimiento = db.Column(db.Date, unique=False)
+    fechanacimiento = db.Column(db.String(15), unique=False)
     condicionesmedicas = db.Column(db.String(200))
     medicacion = db.Column(db.String(200))
     emergencias = db.Column(db.String(15))
@@ -44,8 +44,8 @@ class Usuarios(db.Model):
     celular = db.Column(db.String(15))
     peso = db.Column(db.String(10))
     altura = db.Column(db.String(10))
-    fechaingreso  =  db.Column(db.Date, unique=False)
-    activo  = db.Column(db.Boolean(), unique=False, nullable=False)
+    fechaingreso  =  db.Column(db.String(15), unique=False)
+    activo  = db.Column(db.String(10), unique=False, nullable=False)
     
     # FK
     cuota = db.relationship('Cuota', back_populates="usuarios")
@@ -80,21 +80,17 @@ class Usuarios(db.Model):
             "altura": self.altura,
             "fechaingreso": self.fechaingreso,
             "activo": self.activo,
-            "cuota": self.idcuota,
-            "mutualista": self.idmutualista,
+            "idcuota": self.idcuota,
+            "idmutualista": self.idmutualista,
         }
 
     def serializeCuotas(self):
-        results = Cuota.query.filter_by(id = self.id).first()
-        return {
-            "cuotasInfo": results.serialize(),
-        }
+        results = Cuota.query.filter_by(id = self.idcuota).first()
+        return {"cuotasInfo": results.serialize()}
 
     def serializeMutualista(self):
-        results = Mutualista.query.filter_by(id = self.id).first()
-        return {
-            "mutualistaInfo": results.serialize(),
-        }
+        results = Mutualista.query.filter_by(id = self.idmutualista).first()
+        return {"mutualistaInfo": results.serialize()}
 
 #####################################################################################
 #####################################################################################
