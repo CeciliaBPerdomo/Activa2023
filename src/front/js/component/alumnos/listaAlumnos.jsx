@@ -33,11 +33,11 @@ export const ListaAlumnos = () => {
   // Buscador
   const buscar = async (valor) => {
     if (busqueda === "") {
-        actions.obtenerMutualistas();
-     } else {
-   await actions.buscadorAlumno(valor);
- }
-};
+      actions.obtenerMutualistas();
+    } else {
+      await actions.buscadorAlumno(valor);
+    }
+  };
 
   return (
     <>
@@ -84,18 +84,26 @@ export const ListaAlumnos = () => {
                   <td>{item.direccion}</td>
                   <td>{item.cuotasInfo.descripcion}</td>
                   <td className="text-center">
-                    <i className="fa fa-eye"></i>
+                    <Link
+                      to={"/AlumnoIndividual/" + item.id +
+                        "/" + item.idmutualista}
+                      style={{ color: "white" }}
+                    >
+                      <i className="fa fa-eye"></i>
+                    </Link>
                   </td>
                   <td className="text-center">
                     <i className="fa fa-dumbbell"></i>
                   </td>
                   <td className="text-center">
-                    {/* <Link to={"/ModificarMutualista/" + item.id} style={{color: "white"}}>  */}
+                    {/* <Link to={"/ModificarMutualista/" + item.id + "item.idmutualista"} style={{color: "white"}}>  */}
                     <i className="fa fa-pen"></i>
                     {/* </Link> */}
                   </td>
                   <td className="text-center">
-                    <i className="fa fa-trash" onClick={(e) => borrar(e, item.id)}
+                    <i
+                      className="fa fa-trash"
+                      onClick={(e) => borrar(e, item.id)}
                     >
                     </i>
                   </td>

@@ -331,3 +331,15 @@ def deleteAlumno(alumno_id):
 
     response_body = {"msg": "Alumno borrado"}
     return jsonify(response_body), 200 
+
+# Muestra el alumno por id
+@api.route('/alumnos/<int:alumno_id>', methods=['GET'])
+def get_alumnoind(alumno_id):
+    alumno = Usuarios.query.filter_by(id=alumno_id).all()
+    results = list(map(lambda x: {**x.serializeCuotas(), **x.serialize()}, alumno))
+
+    if results is None: 
+        response_body = {"msg": "Usuario no encontrado"}
+        return jsonify(response_body), 400
+
+    return jsonify(results), 200

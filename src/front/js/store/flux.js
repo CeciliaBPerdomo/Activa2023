@@ -241,7 +241,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
 
-      // Obtener metodo por id
+      // Obtener mutualista por id
       obtenerMutualistaId: async (id) => {
         try {
           const response = await axios.get(
@@ -307,6 +307,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           setStore({
             alumnos: response.data,
           });
+          console.log(response.data)
         } catch (error) {
           if (error.code === "ERR_BAD_REQUEST") {
             console.log(error.response.data.msg);
@@ -395,6 +396,23 @@ const getState = ({ getStore, getActions, setStore }) => {
               });
             },
       
+      // Obtener alumno por id
+      obtenerAlumnoId: async (id) => {
+        try {
+          const response = await axios.get(
+            direccion + "/api/alumnos/" + id,
+            {},
+          );
+          setStore({
+            alumno: response.data,
+          });
+          //console.log(response.data)
+        } catch (error) {
+          if (error.code === "ERR_BAD_REQUEST") {
+            console.log(error.response.data.msg);
+          }
+        }
+      },
 
 
       getMessage: async () => {
