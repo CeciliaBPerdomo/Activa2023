@@ -22,7 +22,7 @@ export const ModificarCuota = () => {
         e.preventDefault()
         let id = parseInt(params.theid)
 
-        if (actions.modificarCuota(id, descripcion, precio)){
+        if (actions.modificarAlumno(id, descripcion, precio)){
             toast.success("💪 Modificación realizada con éxito", {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 3000,
@@ -34,9 +34,9 @@ export const ModificarCuota = () => {
                 theme: "dark",
             });
 
-            setInterval(() => {
-                navegacion("/CrearCuota");
-            }, 5000);
+            // setInterval(() => {
+            //     navegacion("/CrearCuota");
+            // }, 5000);
         }
     }
 

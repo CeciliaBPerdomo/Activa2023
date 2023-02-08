@@ -307,7 +307,6 @@ const getState = ({ getStore, getActions, setStore }) => {
           setStore({
             alumnos: response.data,
           });
-          console.log(response.data)
         } catch (error) {
           if (error.code === "ERR_BAD_REQUEST") {
             console.log(error.response.data.msg);
@@ -379,8 +378,8 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
 
-            // Buscador de alumno
-            buscadorAlumno: (valor) => {
+      // Buscador de alumno
+      buscadorAlumno: (valor) => {
               let store = getStore();
               let resultados = store.alumnos.filter((item) => {
                 if (
@@ -394,7 +393,7 @@ const getState = ({ getStore, getActions, setStore }) => {
               setStore({
                 alumnos: resultados,
               });
-            },
+      },
       
       // Obtener alumno por id
       obtenerAlumnoId: async (id) => {
@@ -406,7 +405,63 @@ const getState = ({ getStore, getActions, setStore }) => {
           setStore({
             alumno: response.data,
           });
-          //console.log(response.data)
+          console.log(response.data)
+        } catch (error) {
+          if (error.code === "ERR_BAD_REQUEST") {
+            console.log(error.response.data.msg);
+          }
+        }
+      },
+
+      // Modificar Alumno
+      modificarAlumno: async (id, 
+        cedula,
+        nombre,
+        apellido,
+        direccionAlumno,
+        celular,
+        fechanacimiento,
+        peso,
+        altura,
+        email,
+        idmutualista,
+        condicionesmedicas,
+        medicacion,
+        emergencias,
+        motivoentrenamiento,
+        idcuota,
+        rol,
+        activo,
+        observaciones,
+        fechaingreso,
+        foto
+      ) => {
+        try {
+          await axios.put(direccion + "/api/alumnos/" + id, {
+            id: id,
+            cedula: cedula,
+            nombre: nombre,
+            apellido: apellido,
+            direccion: direccionAlumno,
+            email: email,
+            fechanacimiento: fechanacimiento,
+            condicionesmedicas: condicionesmedicas,
+            medicacion: medicacion,
+            emergencias: emergencias,
+            //password: cedula,
+            rol: rol,
+            motivoentrenamiento: motivoentrenamiento,
+            observaciones: observaciones,
+            foto: foto,
+            celular: celular,
+            peso: peso,
+            altura: altura,
+            fechaingreso: fechaingreso,
+            activo: activo,
+            idcuota: idcuota,
+            idmutualista: idmutualista,
+          });
+          return true;
         } catch (error) {
           if (error.code === "ERR_BAD_REQUEST") {
             console.log(error.response.data.msg);

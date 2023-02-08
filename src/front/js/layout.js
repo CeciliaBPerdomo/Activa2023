@@ -24,7 +24,8 @@ import { ModificarMutualistas } from "./component/mutualista/modificarMutualista
 // Alumnos
 import { CrearAlumno } from "./component/alumnos/crearAlumno.jsx"
 import { ListaAlumnos } from "./component/alumnos/listaAlumnos.jsx"
-import { AlumnoIndividual} from "./component/alumnos/alumnoIndividual.jsx"
+import { AlumnoIndividual } from "./component/alumnos/alumnoIndividual.jsx"
+import { ModificarAlumno } from "./component/alumnos/modificarAlumno.jsx"
 
 //create your first component
 const Layout = () => {
@@ -56,6 +57,7 @@ const Layout = () => {
                         <Route element={<CrearAlumno />} path="/CrearAlumno" />
                         <Route element={<ListaAlumnos />} path="/ListadoAlumnos" />
                         <Route element={<AlumnoIndividual />} path="/AlumnoIndividual/:theid/:theidMutualista" />
+                        <Route element={<ModificarAlumno />} path="/ModificarAlumno/:theid" />
 
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>

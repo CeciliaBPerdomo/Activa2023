@@ -35,9 +35,9 @@ export const ModificarMetodos = () => {
         theme: "dark",
       });
 
-      setInterval(() => {
-        navegacion("/MetodosPago");
-      }, 5000);
+      // setInterval(() => {
+      //   navegacion("/MetodosPago");
+      // }, 5000);
     }
   };
 

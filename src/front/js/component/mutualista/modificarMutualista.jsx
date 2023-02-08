@@ -34,9 +34,9 @@ export const ModificarMutualistas = () => {
         theme: "dark",
       });
 
-      setInterval(() => {
-        navegacion("/Mutualista");
-      }, 5000);
+      // setInterval(() => {
+      //   navegacion("/Mutualista");
+      // }, 5000);
     }
   };
 

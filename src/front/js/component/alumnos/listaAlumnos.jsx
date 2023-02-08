@@ -96,9 +96,9 @@ export const ListaAlumnos = () => {
                     <i className="fa fa-dumbbell"></i>
                   </td>
                   <td className="text-center">
-                    {/* <Link to={"/ModificarMutualista/" + item.id + "item.idmutualista"} style={{color: "white"}}>  */}
-                    <i className="fa fa-pen"></i>
-                    {/* </Link> */}
+                    <Link to={"/ModificarAlumno/" + item.id } style={{color: "white"}}> 
+                      <i className="fa fa-pen"></i>
+                    </Link>
                   </td>
                   <td className="text-center">
                     <i

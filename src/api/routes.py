@@ -343,3 +343,77 @@ def get_alumnoind(alumno_id):
         return jsonify(response_body), 400
 
     return jsonify(results), 200
+
+# Modifica un usuario por id
+@api.route('/alumnos/<int:user_id>', methods=['PUT'])
+def usersModif_porId(user_id):
+    print(user_id)
+    usuario = Usuarios.query.filter_by(id=user_id).first()
+    body = json.loads(request.data)
+
+    if usuario is None:
+        response_body = {"msg": "No existe el usuario"}
+        return jsonify(response_body), 400    
+
+    if "cedula" in body:
+        usuario.cedula =  body["cedula"]
+       # usuario.password = body["cedula"]
+
+    if "nombre" in body: 
+        usuario.nombre = body["nombre"]
+
+    if "apellido" in body:
+        usuario.apellido = body["apellido"]
+
+    if "direccion" in body: 
+        usuario.direccion = body["direccion"]
+    
+    if "celular" in body:
+        usuario.celular = body["celular"]
+
+    if "fechanamiento" in body:
+        usuario.fechanacimiento = body["fechanacimiento"]
+    
+    if "peso" in body: 
+        usuario.peso = body["peso"]
+    
+    if "altura" in body:
+        usuario.altura = body["altura"]
+
+    if "fechaingreso" in body:
+        usuario.fechaingreso = body["fechaingreso"]
+    
+    if "email" in body:
+        usuario.email = body["email"]
+
+    if "idmutualista" in body: 
+        usuario.idmutualista = body["idmutualista"]
+    
+    if "condicionesmedicas" in body:
+        usuario.condicionesmedicas=body["condicionesmedicas"]
+    
+    if "medicacion" in body:
+        usuario.medicacion = body["medicacion"]
+    
+    if "emergencias" in body:
+        usuario.emergencias = body["emergencias"]
+    
+    if "motivoentrenamiento" in body:
+        usuario.motivoentrenamiento = body["motivoentrenamiento"]
+    
+    if "idcuota" in body:
+        usuario.idcuota = body["idcuota"]
+    
+    if "rol"in body:
+        usuario.rol = body["rol"]
+    
+    if "activo" in body:
+        usuario.activo = body["activo"]
+    
+    if "observaciones" in body:
+        usuario.observaciones = body["observaciones"]
+
+    db.session.commit()
+
+    response_body = {"msg": "Usuario modificado"}
+    return jsonify(response_body), 200

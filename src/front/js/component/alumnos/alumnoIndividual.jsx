@@ -8,11 +8,14 @@ export const AlumnoIndividual = () => {
   const params = useParams();
 
   useEffect(() => {
+    
     const info = async () => {
       await actions.obtenerAlumnoId(parseInt(params.theid));
      };
+    
     actions.obtenerMutualistaId(parseInt(params.theidMutualista));
-    info();
+    
+     info();
   }, []);
 
   return (

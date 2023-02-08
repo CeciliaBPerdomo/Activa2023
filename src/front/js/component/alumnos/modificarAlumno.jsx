@@ -1,54 +1,58 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../../store/appContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-/*
- cedula, nombre, apellido, direccionAlumno,
- celular, fechanacimiento, peso, altura,
-  email, idmutualista, condicionesmedicas, medicacion,
-  emergencias, motivoentrenamiento, idcuota,
-  rol, activo, observaciones,
-*/
-
-export const CrearAlumno = () => {
+export const ModificarAlumno = () => {
   const { store, actions } = useContext(Context);
   let navegacion = useNavigate();
+  const params = useParams();
 
-  const [cedula, setCedula] = useState("");
-  const [nombre, setNombre] = useState("");
-  const [apellido, setApellido] = useState("");
-  const [direccion, setDireccion] = useState("");
-  const [celular, setCelular] = useState("");
-  const [fechanacimiento, setFechaNacimiento] = useState("");
-  const [peso, setPeso] = useState("");
-  const [altura, setAltura] = useState("");
-  const [email, setEmail] = useState("");
-  const [mutualista, setMutualista] = useState("");
-  const [condiciones, setCondiciones] = useState("");
-  const [medicacion, setMedicacion] = useState("");
-  const [emergencias, setEmergencias] = useState("");
-  const [motivo, setMotivo] = useState("");
-  const [cuota, setCuota] = useState("");
-  const [rol, setRol] = useState("");
-  const [activo, setActivo] = useState("");
-  const [observaciones, setObservaciones] = useState("");
-  const [ingreso, setIngreso] = useState("");
-  const [foto, setFoto] = useState("");
+  const [cedula, setCedula] = useState(store.alumno[0]?.cedula);
+  const [nombre, setNombre] = useState(store.alumno[0]?.nombre);
+  const [apellido, setApellido] = useState(store.alumno[0]?.apellido);
+  const [direccion, setDireccion] = useState(store.alumno[0]?.direccion);
+  const [celular, setCelular] = useState(store.alumno[0]?.celular);
+  const [fechanacimiento, setFechaNacimiento] = useState(
+    store.alumno[0]?.fechanacimiento,
+  );
+  const [peso, setPeso] = useState(store.alumno[0]?.peso);
+  const [altura, setAltura] = useState(store.alumno[0]?.altura);
+  const [email, setEmail] = useState(store.alumno[0]?.email);
+  const [mutualista, setMutualista] = useState(store.alumno[0]?.idmutualista);
+  const [condiciones, setCondiciones] = useState(
+    store.alumno[0]?.condicionesmedicas,
+  );
+  const [medicacion, setMedicacion] = useState(store.alumno[0]?.medicacion);
+  const [emergencias, setEmergencias] = useState(store.alumno[0]?.emergencias);
+  const [motivo, setMotivo] = useState(store.alumno[0]?.motivo);
+  const [cuota, setCuota] = useState(store.alumno[0]?.idcuota);
+  const [rol, setRol] = useState(store.alumno[0]?.rol);
+  const [activo, setActivo] = useState(store.alumno[0]?.activo);
+  const [observaciones, setObservaciones] = useState(
+    store.alumno[0]?.observaciones,
+  );
+  const [ingreso, setIngreso] = useState(store.alumno[0]?.fechaingreso);
+  const [foto, setFoto] = useState(store.alumno[0]?.foto);
 
   useEffect(() => {
-    actions.obtenerCuotas();
+    const info = async () => {
+      await actions.obtenerAlumnoId(parseInt(params.theid));
+    };
+
     actions.obtenerMutualistas();
+    actions.obtenerMutualistaId(parseInt(params.theidMutualista));
+
+    info();
   }, []);
 
-  const guardar = (e) => {
-    e.preventDefault();
-    console.log(mutualista);
+  const modificar = (e) => {
+    e.preventDefault()
+    let id = parseInt(params.theid)
 
-    if (
-      actions.crearAlumnos(
-        cedula,
+    if (actions.modificarAlumno(id, 
+      cedula,
         nombre,
         apellido,
         direccion,
@@ -67,30 +71,31 @@ export const CrearAlumno = () => {
         activo,
         observaciones,
         ingreso,
-        foto,
-      )
-    ) {
-      toast.success("💪 Guardado con éxito", {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-    }
+        foto)){
+        toast.success("💪 Modificación realizada con éxito", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+        });
 
-    // setInterval(() => {
-    //   navegacion("/ListadoAlumnos");
-    // }, 5000);
-  };
+      //   setInterval(() => {
+      //     navegacion("/ListadoAlumnos");
+      // }, 5000);
+    }
+}
+
 
   return (
     <>
       <div className="container">
-        <h3 style={{ marginBottom: "25px" }}>Ingresar alumnos</h3>
+        <h3 style={{ marginBottom: "25px" }}>
+          Modificar información del alumno
+        </h3>
         <hr />
         <br />
 
@@ -105,7 +110,7 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Cédula (sin puntos ni guiones)"
-                value={cedula}
+                defaultValue={store.alumno[0]?.cedula}
                 onChange={(e) => setCedula(e.target.value)}
               />
             </div>
@@ -119,7 +124,7 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Nombre"
-                value={nombre}
+                defaultValue={store.alumno[0]?.nombre}
                 onChange={(e) => setNombre(e.target.value)}
               />
             </div>
@@ -133,7 +138,7 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Apellido"
-                value={apellido}
+                defaultValue={store.alumno[0]?.apellido}
                 onChange={(e) => setApellido(e.target.value)}
               />
             </div>
@@ -150,7 +155,7 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Dirección"
-                value={direccion}
+                defaultValue={store.alumno[0]?.direccion}
                 onChange={(e) => setDireccion(e.target.value)}
               />
             </div>
@@ -164,7 +169,7 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Celular"
-                value={celular}
+                defaultValue={store.alumno[0]?.celular}
                 onChange={(e) => setCelular(e.target.value)}
               />
             </div>
@@ -178,7 +183,7 @@ export const CrearAlumno = () => {
                 type="date"
                 className="form-control"
                 placeholder="Fecha de nacimiento"
-                value={fechanacimiento}
+                defaultValue={store.alumno[0]?.fechanacimiento}
                 onChange={(e) => setFechaNacimiento(e.target.value)}
               />
             </div>
@@ -195,7 +200,7 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Peso"
-                value={peso}
+                defaultValue={store.alumno[0]?.peso}
                 onChange={(e) => setPeso(e.target.value)}
               />
             </div>
@@ -209,7 +214,7 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Altura"
-                value={altura}
+                defaultValue={store.alumno[0]?.altura}
                 onChange={(e) => setAltura(e.target.value)}
               />
             </div>
@@ -223,7 +228,7 @@ export const CrearAlumno = () => {
                 type="date"
                 className="form-control"
                 placeholder="Fecha de ingreso"
-                value={ingreso}
+                defaultValue={store.alumno[0]?.fechaingreso}
                 onChange={(e) => setIngreso(e.target.value)}
               />
             </div>
@@ -240,7 +245,7 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Correo electrónico"
-                value={email}
+                defaultValue={store.alumno[0]?.email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
@@ -254,7 +259,7 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Foto (URL)"
-                value={foto}
+                defaultValue={store.alumno[0]?.foto}
                 onChange={(e) => setFoto(e.target.value)}
               />
             </div>
@@ -267,10 +272,10 @@ export const CrearAlumno = () => {
               <select
                 className="form-select"
                 aria-label="Default select example"
-                value={mutualista}
+                defaultValue={store.alumno[0]?.idmutualista}
                 onChange={(e) => setMutualista(e.target.value)}
               >
-                <option selected>Mutualista</option>
+                <option selected>{store.alumno[0]?.idmutualista}</option>
                 {store.mutualistas.map((item, id) => (
                   <option key={id} value={item.id}>{item.nombre}</option>
                 ))}
@@ -289,7 +294,7 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Condiciones médicas"
-                value={condiciones}
+                defaultValue={store.alumno[0]?.condicionesmedicas}
                 onChange={(e) => setCondiciones(e.target.value)}
               />
             </div>
@@ -303,7 +308,7 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Si toma algún médicamento"
-                value={medicacion}
+                defaultValue={store.alumno[0]?.medicacion}
                 onChange={(e) => setMedicacion(e.target.value)}
               />
             </div>
@@ -317,7 +322,7 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Telefono en caso de emergencia"
-                value={emergencias}
+                defaultValue={store.alumno[0]?.emergencias}
                 onChange={(e) => setEmergencias(e.target.value)}
               />
             </div>
@@ -334,7 +339,7 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Motivo del entrenamiento"
-                value={motivo}
+                defaultValue={store.alumno[0]?.motivoentrenamiento}
                 onChange={(e) => setMotivo(e.target.value)}
               />
             </div>
@@ -347,10 +352,10 @@ export const CrearAlumno = () => {
               <select
                 className="form-select"
                 aria-label="Default select example"
-                value={cuota}
+                defaultValue={store.alumno[0]?.cuotasInfo.descripcion}
                 onChange={(e) => setCuota(e.target.value)}
               >
-                <option>Modalidad</option>
+                <option>{store.alumno[0]?.cuotasInfo.descripcion}</option>
                 {store.cuotas.map((item, id) => (
                   <option
                     key={id}
@@ -370,10 +375,9 @@ export const CrearAlumno = () => {
               <select
                 className="form-select"
                 aria-label="Default select example"
-                value={rol}
+                defaultValue={store.alumno[0]?.rol}
                 onChange={(e) => setRol(e.target.value)}
               >
-                <option>Rol</option>
                 <option value="Alumno">Alumno</option>
                 <option value="Administrador">Administrador</option>
               </select>
@@ -387,10 +391,10 @@ export const CrearAlumno = () => {
               <select
                 className="form-select"
                 aria-label="Default select example"
-                value={activo}
+                defaultValue={store.alumno[0]?.activo}
                 onChange={(e) => setActivo(e.target.value)}
               >
-                <option>Estado</option>
+                <option>{store.alumno[0]?.activo}</option>
                 <option value="Activo">Activo</option>
                 <option value="Inactivo">Inactivo</option>
               </select>
@@ -408,7 +412,7 @@ export const CrearAlumno = () => {
                 type="text"
                 className="form-control"
                 placeholder="Observaciones"
-                value={observaciones}
+                defaultValue={store.alumno[0]?.observaciones}
                 onChange={(e) => setObservaciones(e.target.value)}
               />
             </div>
@@ -419,15 +423,15 @@ export const CrearAlumno = () => {
             <button
               type="submit"
               className="btn btn-outline-danger float-end w-25"
-              onClick={(e) => guardar(e)}
+              onClick={(e) => modificar(e)}
             >
-              Agregar
+              Modificar
             </button>
           </div>
         </form>
-
-        <ToastContainer />
       </div>
+      <ToastContainer />
+      <br />
     </>
   );
 };
