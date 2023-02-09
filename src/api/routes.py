@@ -347,7 +347,6 @@ def get_alumnoind(alumno_id):
 # Modifica un usuario por id
 @api.route('/alumnos/<int:user_id>', methods=['PUT'])
 def usersModif_porId(user_id):
-    print(user_id)
     usuario = Usuarios.query.filter_by(id=user_id).first()
     body = json.loads(request.data)
 
@@ -417,3 +416,54 @@ def usersModif_porId(user_id):
 
     response_body = {"msg": "Usuario modificado"}
     return jsonify(response_body), 200
+
+#####################################################################################
+#####################################################################################
+###                                                                               ###
+###                   PAGO DE MENSUALIDADES                                       ###
+###                                                                               ###
+#####################################################################################
+#####################################################################################
+# Muestra todos los pagos
+@api.route('/mensualidades', methods=['GET'])
+def getMensualidades():
+    mensualidades = Mensualidades.query.all()
+    results = list(map(lambda x: x.serialize(), mensualidades))
+    return jsonify(results), 200
+
+# Alta de un pago
+@api.route('/mensualidades', methods=['POST'])
+def addMensualidades():
+    body = json.loads(request.data)
+
+    queryNewMensulidades = Mensualidades.query.filter_by(factura=body["factura"]).first()
+    if queryNewMensulidades is None:
+        new_mensualidad = Mensualidades(fechapago=body["fechapago"],
+        monto=body["monto"],
+        factura=body["factura"],
+        observaciones=body["observaciones"],
+        idusuario=body["idusuario"],
+        idmetodo=body["idmetodo"])
+
+        db.session.add(new_mensualidad)
+        db.session.commit()
+
+        return jsonify(new_mensualidad.serialize()), 200
+    
+    response_body = {"msg": "Pago guardado"}
+    return jsonify(response_body), 400
+
+# Elimina un pago
+@api.route('/mensualidades/<int:id>', methods=['DELETE'])
+def deletePago(id):
+    pago = Mensualidades.query.filter_by(id=id).first()
+  
+    if pago is None: 
+        response_body = {"msg": "Pago no encontrado"}
+        return jsonify(response_body), 400
+
+    db.session.delete(id)
+    db.session.commit()
+
+    response_body = {"msg": "Pago borrado"}
+    return jsonify(response_body), 200 

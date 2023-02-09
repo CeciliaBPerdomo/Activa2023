@@ -12,6 +12,8 @@ const getState = ({ getStore, getActions, setStore }) => {
       mutualista: {},
       alumnos: [],
       alumno: {},
+      pago: {},
+      pagos: [],
     },
     actions: {
       ////////////////////////////////////
@@ -469,7 +471,63 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
 
+      ////////////////////////////////////
+      //       Mensualidades           ///
+      ////////////////////////////////////
+      /* Listar las mensualidades */
+      obtenerMensualidades: async () => {
+        try {
+          const response = await axios.get(direccion + "/api/mensualidades", {});
+          setStore({
+            pagos: response.data,
+          });
+        } catch (error) {
+          if (error.code === "ERR_BAD_REQUEST") {
+            console.log(error.response.data.msg);
+          }
+        }
+      },
 
+      /* Crea Mensualidad */
+      crearMensualidad: async (
+        fechapago,
+        monto,
+        factura,
+        observaciones,
+        idusuario,
+        idmetodo
+      ) => {
+        try {
+          await axios.post(direccion + "/api/mensualidades", {
+            fechapago: fechapago,
+            monto: monto,
+            factura: factura,
+            observaciones: observaciones,
+            idusuario: idusuario,
+            idmetodo: idmetodo
+          });
+          return true;
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+      /* Borrar Mensualidad */
+      borrarMensualidad: async (id) => {
+        try {
+          await axios.delete(direccion + "/api/mensualidades/" + id, {});
+          getActions().obtenerMensualidades();
+          return true;
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+
+
+      ////////////////////////////////////
+      //       Por defecto             ///
+      ////////////////////////////////////
       getMessage: async () => {
         try {
           // fetching data from the backend
