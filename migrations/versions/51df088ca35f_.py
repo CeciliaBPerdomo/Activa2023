@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 5002e7a7c261
+Revision ID: 51df088ca35f
 Revises: 
-Create Date: 2023-01-29 19:54:01.528623
+Create Date: 2023-02-10 22:04:32.549691
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '5002e7a7c261'
+revision = '51df088ca35f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -130,8 +130,9 @@ def upgrade():
     sa.Column('cedula', sa.Integer(), nullable=False),
     sa.Column('nombre', sa.String(length=50), nullable=False),
     sa.Column('apellido', sa.String(length=50), nullable=False),
+    sa.Column('direccion', sa.String(length=120), nullable=False),
     sa.Column('email', sa.String(length=120), nullable=False),
-    sa.Column('fechanacimiento', sa.Date(), nullable=True),
+    sa.Column('fechanacimiento', sa.String(length=15), nullable=True),
     sa.Column('condicionesmedicas', sa.String(length=200), nullable=True),
     sa.Column('medicacion', sa.String(length=200), nullable=True),
     sa.Column('emergencias', sa.String(length=15), nullable=True),
@@ -143,8 +144,8 @@ def upgrade():
     sa.Column('celular', sa.String(length=15), nullable=True),
     sa.Column('peso', sa.String(length=10), nullable=True),
     sa.Column('altura', sa.String(length=10), nullable=True),
-    sa.Column('fechaingreso', sa.Date(), nullable=True),
-    sa.Column('activo', sa.Boolean(), nullable=False),
+    sa.Column('fechaingreso', sa.String(length=15), nullable=True),
+    sa.Column('activo', sa.String(length=10), nullable=False),
     sa.Column('idcuota', sa.Integer(), nullable=True),
     sa.Column('idmutualista', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['idcuota'], ['cuota.id'], ),
@@ -180,7 +181,7 @@ def upgrade():
     )
     op.create_table('mensualidades',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('fechapago', sa.Date(), nullable=True),
+    sa.Column('fechapago', sa.String(length=10), nullable=True),
     sa.Column('monto', sa.String(length=10), nullable=True),
     sa.Column('factura', sa.Integer(), nullable=True),
     sa.Column('observaciones', sa.String(length=250), nullable=True),

@@ -87,7 +87,7 @@ class Usuarios(db.Model):
     def serializeCuotas(self):
         results = Cuota.query.filter_by(id = self.idcuota).first()
         return {"cuotasInfo": results.serialize()}
-
+        
     def serializeMutualista(self):
         results = Mutualista.query.filter_by(id = self.idmutualista).first()
         return {"mutualistaInfo": results.serialize()}
@@ -121,7 +121,7 @@ class Cuota(db.Model):
 ## Mensualidades: pago mensual de los alumnos
 class Mensualidades(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    fechapago = db.Column(db.Date)
+    fechapago = db.Column(db.String(10))
     monto = db.Column(db.String(10))
     factura = db.Column(db.Integer)
     observaciones = db.Column(db.String(250))
@@ -147,10 +147,13 @@ class Mensualidades(db.Model):
         }
     
     def serializeMetodo(self):
-        results = Metodospago.query.filter_by(id = self.id).first()
-        return {
-            "metodosInfo": results.serialize(),
-        }
+        results = Metodospago.query.filter_by(id = self.idmetodo).first()
+        return {"metodosInfo": results.serialize()}
+    
+    def serializeAlumnos(self):
+        results = Usuarios.query.filter_by(id = self.idusuario).first()
+        return {"alumnoInfo": results.serialize()}
+    
 
 # Metodos de pago: Efectivo, pos, transferencia bancaria
 class Metodospago(db.Model):

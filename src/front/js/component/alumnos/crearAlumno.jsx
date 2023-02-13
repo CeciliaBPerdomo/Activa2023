@@ -44,7 +44,6 @@ export const CrearAlumno = () => {
 
   const guardar = (e) => {
     e.preventDefault();
-    console.log(mutualista);
 
     if (
       actions.crearAlumnos(

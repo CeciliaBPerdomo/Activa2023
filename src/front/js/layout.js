@@ -30,6 +30,7 @@ import { ModificarAlumno } from "./component/alumnos/modificarAlumno.jsx"
 // Mensualidades
 import { ListadoMensualidades } from "./component/mensualidades/ListadoMensualidades.jsx"
 import { CrearMensualidad } from "./component/mensualidades/crearMensualidades.jsx"
+import { ModificarMensualidad } from "./component/mensualidades/modificarMensualidades.jsx"
 
 //create your first component
 const Layout = () => {
@@ -66,6 +67,7 @@ const Layout = () => {
                         {/* Mensualidades */}
                         <Route element={<CrearMensualidad />} path="/CrearMensualidad" />
                         <Route element={<ListadoMensualidades />} path="/ListadoMensualidades" />
+                        <Route element={<ModificarMensualidad />} path="/ModificarMensualidad/:theid" />
 
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>

@@ -52,7 +52,7 @@ export const ModificarAlumno = () => {
     let id = parseInt(params.theid)
 
     if (actions.modificarAlumno(id, 
-      cedula,
+        cedula,
         nombre,
         apellido,
         direccion,

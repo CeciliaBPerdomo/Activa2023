@@ -1,51 +1,53 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../../store/appContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export const CrearMensualidad = () => {
+export const ModificarMensualidad = () => {
     const { store, actions } = useContext(Context);
-    let navegacion = useNavigate();
+    let params = useParams()
 
-    const [fechapago, setFechaPago] = useState("")
-    const [monto, setMonto] = useState("")
-    const [factura, setFactura] = useState("")
-    const [observaciones, setObservaciones] = useState("")
-    const [idusuario, setIdUsuario] = useState("")
-    const [idmetodo, setIdMetodo] = useState("")
+    const [fechapago, setFechaPago] = useState(store.pago[0]?.fechapago)
+    const [monto, setMonto] = useState(store.pago[0]?.monto)
+    const [factura, setFactura] = useState(store.pago[0]?.factura)
+    const [observaciones, setObservaciones] = useState(store.pago[0]?.observaciones)
+    const [idusuario, setIdUsuario] = useState(store.pago[0]?.idusuario)
+    const [idmetodo, setIdMetodo] = useState(store.pago[0]?.idmetodo)
 
     useEffect(() => {
-        actions.obtenerAlumnos();
-        actions.obtenerMetodos()
+       actions.obtenerMensualidadId(parseInt(params.theid))
+       actions.obtenerMetodos()
       }, []);
 
-      const guardar = (e) => {
-        e.preventDefault();
+      const modificar = (e) => {
+        e.preventDefault()
+        let id = parseInt(params.theid)
     
-        if (actions.crearMensualidad(fechapago, monto, factura, observaciones, idusuario, idmetodo)) {
-          toast.success("💪 Guardado con éxito", {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
+        if(actions.modificarMensualidad(id, 
+            fechapago,
+            monto,
+            factura,
+            observaciones,
+            idusuario,
+            idmetodo)){
+                toast.success("💪 Modificación realizada con éxito", {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                });
+            }
         }
-        /* Limpiar el formulario */
-        setFechaPago("");
-        setMonto("");
-        setFactura("")
-        setObservaciones("")
-      };
 
       return (
         <>
           <div className="container">
-            <h3 style={{ marginBottom: "25px" }}>Ingresar nuevo pago de mensualidad</h3>
+            <h3 style={{ marginBottom: "25px" }}>Modificar pago de la mensualidad</h3>
             <hr />
             <br />
 
@@ -59,7 +61,7 @@ export const CrearMensualidad = () => {
                     <select className="form-select" aria-label="Default select example"
                         value={idusuario}
                         onChange={(e) => setIdUsuario(e.target.value)}>
-                        <option selected>Alumno</option>
+                        <option selected>{store.pago[0]?.alumnoInfo.nombre} {store.pago[0]?.alumnoInfo.apellido}</option>
                         {store.alumnos.map((item,id) => (
                         <option key={id} value={item.id}>{item.nombre} {item.apellido}</option>
                         ))}
@@ -74,7 +76,7 @@ export const CrearMensualidad = () => {
                     <input
                         type="date"
                         className="form-control"
-                        value={fechapago}
+                        defaultValue={store.pago[0]?.fechapago}
                         onChange={(e) => setFechaPago(e.target.value)}
                     />
                     </div>
@@ -91,7 +93,7 @@ export const CrearMensualidad = () => {
                             type="text"
                             className="form-control"
                             placeholder="Monto"
-                            value={monto}
+                            defaultValue={store.pago[0]?.monto}
                             onChange={(e) => setMonto(e.target.value)}
                         />
                     </div>
@@ -105,7 +107,7 @@ export const CrearMensualidad = () => {
                             type="text"
                             className="form-control"
                             placeholder="Número de factura"
-                            value={factura}
+                            defaultValue={store.pago[0]?.factura}
                             onChange={(e) => setFactura(e.target.value)}
                         />
                     </div>
@@ -119,7 +121,7 @@ export const CrearMensualidad = () => {
                     value={idmetodo}
                     onChange={(e) => setIdMetodo(e.target.value)}
                     >
-                        <option selected>Metodo</option>
+                        <option selected>{store.pago[0]?.idmetodo}</option>
                         {store.metodos.map((item,id) => (
                         <option key={id} value={item.id}>{item.tipo}</option>
                         ))}
@@ -138,7 +140,7 @@ export const CrearMensualidad = () => {
                             type="text"
                             className="form-control"
                             placeholder="Observaciones"
-                            value={observaciones}
+                            defaultValue={store.pago[0]?.observaciones}
                             onChange={(e) => setObservaciones(e.target.value)}
                         />
                     </div>
@@ -149,9 +151,9 @@ export const CrearMensualidad = () => {
                     <button
                     type="submit"
                     className="btn btn-outline-danger float-end w-25"
-                    onClick={(e) => guardar(e)}
+                    onClick={(e) => modificar(e)}
                     >
-                    Guardar
+                    Modificar
                     </button>
                 </div>
             </form>

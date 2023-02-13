@@ -523,7 +523,67 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
 
+      // Modificar mensualidad
+      modificarMensualidad: async (id, 
+        fechapago,
+        monto,
+        factura,
+        observaciones,
+        idusuario,
+        idmetodo
+      ) => {
+        try {
+          await axios.put(direccion + "/api/mensualidades/" + id, {
+            id: id,
+            fechapago: fechapago,
+            monto: monto,
+            factura: factura,
+            observaciones: observaciones,
+            idusuario: idusuario,
+            idmetodo: idmetodo,
+          });
+          return true;
+        } catch (error) {
+          if (error.code === "ERR_BAD_REQUEST") {
+            console.log(error.response.data.msg);
+          }
+        }
+      },
 
+      // Buscador de Mensualidad
+      buscadorMensualidad: (valor) => {
+        let store = getStore();
+        let resultados = store.pagos.filter((item) => {
+          if (
+            item.factura.toString().toLowerCase().includes(
+              valor.toLowerCase(),
+            )
+          ) {
+            return valor;
+          }
+        });
+        setStore({
+          pagos: resultados,
+        });
+      },
+
+            // Obtener mensualidad por id
+            obtenerMensualidadId: async (id) => {
+              try {
+                const response = await axios.get(
+                  direccion + "/api/mensualidades/" + id,
+                  {},
+                );
+                setStore({
+                  pago: response.data,
+                });
+              } catch (error) {
+                if (error.code === "ERR_BAD_REQUEST") {
+                  console.log(error.response.data.msg);
+                }
+              }
+            },
+      
 
       ////////////////////////////////////
       //       Por defecto             ///
