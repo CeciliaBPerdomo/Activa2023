@@ -14,6 +14,8 @@ const getState = ({ getStore, getActions, setStore }) => {
       alumno: {},
       pago: {},
       pagos: [],
+      producto: {},
+      productos: [],
     },
     actions: {
       ////////////////////////////////////
@@ -337,7 +339,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         activo,
         observaciones,
         fechaingreso,
-        foto
+        foto,
       ) => {
         try {
           await axios.post(direccion + "/api/alumnos", {
@@ -382,21 +384,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 
       // Buscador de alumno
       buscadorAlumno: (valor) => {
-              let store = getStore();
-              let resultados = store.alumnos.filter((item) => {
-                if (
-                  item.nombre.toString().toLowerCase().includes(
-                    valor.toLowerCase(),
-                  )
-                ) {
-                  return valor;
-                }
-              });
-              setStore({
-                alumnos: resultados,
-              });
+        let store = getStore();
+        let resultados = store.alumnos.filter((item) => {
+          if (
+            item.nombre.toString().toLowerCase().includes(
+              valor.toLowerCase(),
+            )
+          ) {
+            return valor;
+          }
+        });
+        setStore({
+          alumnos: resultados,
+        });
       },
-      
+
       // Obtener alumno por id
       obtenerAlumnoId: async (id) => {
         try {
@@ -415,7 +417,8 @@ const getState = ({ getStore, getActions, setStore }) => {
       },
 
       // Modificar Alumno
-      modificarAlumno: async (id, 
+      modificarAlumno: async (
+        id,
         cedula,
         nombre,
         apellido,
@@ -435,7 +438,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         activo,
         observaciones,
         fechaingreso,
-        foto
+        foto,
       ) => {
         try {
           await axios.put(direccion + "/api/alumnos/" + id, {
@@ -476,7 +479,10 @@ const getState = ({ getStore, getActions, setStore }) => {
       /* Listar las mensualidades */
       obtenerMensualidades: async () => {
         try {
-          const response = await axios.get(direccion + "/api/mensualidades", {});
+          const response = await axios.get(
+            direccion + "/api/mensualidades",
+            {},
+          );
           setStore({
             pagos: response.data,
           });
@@ -494,7 +500,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         factura,
         observaciones,
         idusuario,
-        idmetodo
+        idmetodo,
       ) => {
         try {
           await axios.post(direccion + "/api/mensualidades", {
@@ -503,7 +509,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             factura: factura,
             observaciones: observaciones,
             idusuario: idusuario,
-            idmetodo: idmetodo
+            idmetodo: idmetodo,
           });
           return true;
         } catch (error) {
@@ -523,13 +529,14 @@ const getState = ({ getStore, getActions, setStore }) => {
       },
 
       // Modificar mensualidad
-      modificarMensualidad: async (id, 
+      modificarMensualidad: async (
+        id,
         fechapago,
         monto,
         factura,
         observaciones,
         idusuario,
-        idmetodo
+        idmetodo,
       ) => {
         try {
           await axios.put(direccion + "/api/mensualidades/" + id, {
@@ -568,21 +575,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 
       // Obtener mensualidad por id
       obtenerMensualidadId: async (id) => {
-              try {
-                const response = await axios.get(
-                  direccion + "/api/mensualidades/" + id,
-                  {},
-                );
-                setStore({
-                  pago: response.data,
-                });
-              } catch (error) {
-                if (error.code === "ERR_BAD_REQUEST") {
-                  console.log(error.response.data.msg);
-                }
-              }
+        try {
+          const response = await axios.get(
+            direccion + "/api/mensualidades/" + id,
+            {},
+          );
+          setStore({
+            pago: response.data,
+          });
+        } catch (error) {
+          if (error.code === "ERR_BAD_REQUEST") {
+            console.log(error.response.data.msg);
+          }
+        }
       },
-      
+
       // Obtener mensualidad por id
       obtenerMensualidadIdUsuario: async (id) => {
         try {
@@ -598,7 +605,125 @@ const getState = ({ getStore, getActions, setStore }) => {
             console.log(error.response.data.msg);
           }
         }
-},
+      },
+
+      ////////////////////////////////////
+      //       Productos               ///
+      ////////////////////////////////////
+      /* Listar productos */
+      obtenerProductos: async () => {
+        try {
+          const response = await axios.get(direccion + "/api/productos", {});
+          setStore({
+            productos: response.data,
+          });
+        } catch (error) {
+          if (error.code === "ERR_BAD_REQUEST") {
+            console.log(error.response.data.msg);
+          }
+        }
+      },
+
+      /* Crea Productos */
+      crearProductos: async (
+        nombre,
+        cantidad,
+        precioventa,
+        observaciones,
+        foto,
+        video,
+        proveedorid,
+      ) => {
+        try {
+          await axios.post(direccion + "/api/productos", {
+            nombre: nombre,
+            cantidad: cantidad,
+            precioventa: precioventa,
+            observaciones: observaciones,
+            foto: foto,
+            video: video,
+            proveedorid: proveedorid,
+          });
+          return true;
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+      /* Borrar Productos */
+      borrarProductos: async (id) => {
+        try {
+          await axios.delete(direccion + "/api/productos/" + id, {});
+          getActions().obtenerProductos();
+          return true;
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+      // Modificar productos
+      modificarProductos: async (
+        id,
+        nombre,
+        cantidad,
+        precioventa,
+        observaciones,
+        foto,
+        video,
+        proveedorid,
+      ) => {
+        try {
+          await axios.put(direccion + "/api/productos/" + id, {
+            id: id,
+            nombre: nombre,
+            cantidad: cantidad,
+            precioventa: precioventa,
+            observaciones: observaciones,
+            foto: foto,
+            video: video,
+            proveedorid: proveedorid,
+          });
+          return true;
+        } catch (error) {
+          if (error.code === "ERR_BAD_REQUEST") {
+            console.log(error.response.data.msg);
+          }
+        }
+      },
+
+      // Obtener products por id
+      obtenerProdcutosId: async (id) => {
+        try {
+          const response = await axios.get(
+            direccion + "/api/productos/" + id,
+            {},
+          );
+          setStore({
+            producto: response.data,
+          });
+        } catch (error) {
+          if (error.code === "ERR_BAD_REQUEST") {
+            console.log(error.response.data.msg);
+          }
+        }
+      },
+
+      // Buscador de Mensualidad
+      buscadorProductos: (valor) => {
+        let store = getStore();
+        let resultados = store.productos.filter((item) => {
+          if (
+            item.nombre.toString().toLowerCase().includes(
+              valor.toLowerCase(),
+            )
+          ) {
+            return valor;
+          }
+        });
+        setStore({
+          productos: resultados,
+        });
+      },
 
       ////////////////////////////////////
       //       Por defecto             ///
