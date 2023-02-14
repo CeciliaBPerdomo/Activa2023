@@ -407,7 +407,6 @@ const getState = ({ getStore, getActions, setStore }) => {
           setStore({
             alumno: response.data,
           });
-          console.log(response.data)
         } catch (error) {
           if (error.code === "ERR_BAD_REQUEST") {
             console.log(error.response.data.msg);
@@ -567,8 +566,8 @@ const getState = ({ getStore, getActions, setStore }) => {
         });
       },
 
-            // Obtener mensualidad por id
-            obtenerMensualidadId: async (id) => {
+      // Obtener mensualidad por id
+      obtenerMensualidadId: async (id) => {
               try {
                 const response = await axios.get(
                   direccion + "/api/mensualidades/" + id,
@@ -582,8 +581,24 @@ const getState = ({ getStore, getActions, setStore }) => {
                   console.log(error.response.data.msg);
                 }
               }
-            },
+      },
       
+      // Obtener mensualidad por id
+      obtenerMensualidadIdUsuario: async (id) => {
+        try {
+          const response = await axios.get(
+            direccion + "/api/mensualidadesAlumno/" + id,
+            {},
+          );
+          setStore({
+            pagos: response.data,
+          });
+        } catch (error) {
+          if (error.code === "ERR_BAD_REQUEST") {
+            console.log(error.response.data.msg);
+          }
+        }
+},
 
       ////////////////////////////////////
       //       Por defecto             ///

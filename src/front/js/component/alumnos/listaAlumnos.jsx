@@ -74,6 +74,9 @@ export const ListaAlumnos = () => {
                 <th scope="col">Entrenamiento</th>
                 <th scope="col" className="text-center">+ Info</th>
                 <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
@@ -92,11 +95,19 @@ export const ListaAlumnos = () => {
                       <i className="fa fa-eye"></i>
                     </Link>
                   </td>
+                  <td>
+                    <Link to={"/MensualidadporAlumno/" + item.id} style={{ color: "white" }}>
+                      <i className="fa fa-credit-card"></i>
+                    </Link>
+                  </td>
                   <td className="text-center">
                     <i className="fa fa-dumbbell"></i>
                   </td>
                   <td className="text-center">
-                    <Link to={"/ModificarAlumno/" + item.id } style={{color: "white"}}> 
+                    <Link
+                      to={"/ModificarAlumno/" + item.id}
+                      style={{ color: "white" }}
+                    >
                       <i className="fa fa-pen"></i>
                     </Link>
                   </td>

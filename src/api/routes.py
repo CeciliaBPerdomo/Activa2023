@@ -501,14 +501,26 @@ def mensualidadModif_porId(mensualidad_id):
     response_body = {"msg": "Pago de mensualidad modificado"}
     return jsonify(response_body), 200
 
-# Muestra el pago de la mensualidad por id
+# Muestra el pago de la mensualidad por id de pago
 @api.route('/mensualidades/<int:mensualidad_id>', methods=['GET'])
 def get_mensualidadid(mensualidad_id):
     pago = Mensualidades.query.filter_by(id=mensualidad_id).all()
     results = list(map(lambda x: {**x.serializeAlumnos(), **x.serialize()}, pago))
 
     if results is None: 
-        response_body = {"msg": "Mensualidad no encontrado"}
+        response_body = {"msg": "Mensualidad no encontrada"}
+        return jsonify(response_body), 400
+
+    return jsonify(results), 200
+
+# Muestra el pago de la mensualidad por id de usuario
+@api.route('/mensualidadesAlumno/<int:idusuario>', methods=['GET'])
+def pago_mensualidad_id(idusuario):
+    pago = Mensualidades.query.filter_by(idusuario=idusuario).all()
+    results = list(map(lambda x: {**x.serializeMetodo(), **x.serialize()}, pago))
+
+    if results is None: 
+        response_body = {"msg": "Mensualidad no encontrada"}
         return jsonify(response_body), 400
 
     return jsonify(results), 200

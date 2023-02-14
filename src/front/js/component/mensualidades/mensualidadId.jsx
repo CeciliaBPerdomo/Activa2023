@@ -1,27 +1,30 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../../store/appContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export const CrearMensualidad = () => {
+export const MensualidadporAlumno = () => {
     const { store, actions } = useContext(Context);
     let navegacion = useNavigate();
+    const params = useParams();
 
     const [fechapago, setFechaPago] = useState("")
     const [monto, setMonto] = useState("")
     const [factura, setFactura] = useState("")
     const [observaciones, setObservaciones] = useState("")
-    const [idusuario, setIdUsuario] = useState("")
     const [idmetodo, setIdMetodo] = useState("")
 
     useEffect(() => {
         actions.obtenerAlumnos();
         actions.obtenerMetodos()
+        actions.obtenerAlumnoId(parseInt(params.theid))
       }, []);
+
 
       const guardar = (e) => {
         e.preventDefault();
+        let idusuario = parseInt(params.theid)
     
         if (actions.crearMensualidad(fechapago, monto, factura, observaciones, idusuario, idmetodo)) {
           toast.success("💪 Guardado con éxito", {
@@ -56,14 +59,12 @@ export const CrearMensualidad = () => {
                     <label htmlFor="alumno" style={{ marginBottom: "10px" }}>
                         Alumno:
                     </label>
-                    <select className="form-select" aria-label="Default select example"
-                        value={idusuario}
-                        onChange={(e) => setIdUsuario(e.target.value)}>
-                        <option selected>Alumno</option>
-                        {store.alumnos.map((item,id) => (
-                        <option key={id} value={item.id}>{item.nombre} {item.apellido}</option>
-                        ))}
-                    </select>
+                    <input
+                        type="text"
+                        className="form-control"
+                        disabled
+                        value={store.alumno[0]?.nombre + " " + store.alumno[0]?.apellido}
+                    />
                     </div>
 
                     {/* Fecha de pago */}

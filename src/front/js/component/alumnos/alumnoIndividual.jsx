@@ -8,26 +8,30 @@ export const AlumnoIndividual = () => {
   const params = useParams();
 
   useEffect(() => {
-    
     const info = async () => {
       await actions.obtenerAlumnoId(parseInt(params.theid));
-     };
-    
+      await actions.obtenerMensualidadIdUsuario(parseInt(params.theid));
+    };
+
     actions.obtenerMutualistaId(parseInt(params.theidMutualista));
-    
-     info();
+
+    info();
   }, []);
 
   return (
     <>
       <div className="container">
         <h3 style={{ marginBottom: "25px", color: "red" }}>
-          {store.alumno[0]?.nombre} {store.alumno[0]?.apellido} - {store.alumno[0]?.cuotasInfo.descripcion}
+          {store.alumno[0]?.nombre} {store.alumno[0]?.apellido} -{" "}
+          {store.alumno[0]?.cuotasInfo.descripcion}
         </h3>
         <hr />
         <br />
 
-        <p>Motivo del entrenamiento: <b>{store.alumno[0]?.motivoentrenamiento}</b></p>
+        <p>
+          Motivo del entrenamiento:{" "}
+          <b>{store.alumno[0]?.motivoentrenamiento}</b>
+        </p>
         <br />
         <div className="container text-left">
           <div className="row">
@@ -41,7 +45,7 @@ export const AlumnoIndividual = () => {
 
             <div className="col-sm-3">
               {/* Datos personales */}
-              
+
               <p>
                 Cédula:{" "}
                 <b>
@@ -54,15 +58,25 @@ export const AlumnoIndividual = () => {
               <p>
                 Fecha de ingreso: <b>{store.alumno[0]?.fechaingreso}</b>
               </p>
-              <p>Altura: <b>{store.alumno[0]?.altura}</b>. Peso: <b>{store.alumno[0]?.peso} kg.</b></p>
-              <p>Condiciones médicas: <b>{store.alumno[0]?.condicionesmedicas}</b></p> 
-              <p>Emergencias al: <b>{store.alumno[0]?.emergencias}</b></p> 
-              <p>Comentarios: <b>{store.alumno[0]?.observaciones}</b></p> 
+              <p>
+                Altura: <b>{store.alumno[0]?.altura}</b>. Peso:{" "}
+                <b>{store.alumno[0]?.peso} kg.</b>
+              </p>
+              <p>
+                Condiciones médicas:{" "}
+                <b>{store.alumno[0]?.condicionesmedicas}</b>
+              </p>
+              <p>
+                Emergencias al: <b>{store.alumno[0]?.emergencias}</b>
+              </p>
+              <p>
+                Comentarios: <b>{store.alumno[0]?.observaciones}</b>
+              </p>
             </div>
 
             <div className="col-sm-5">
               {/* Datos personales */}
-              
+
               <p>
                 Celular:{" "}
                 <b>
@@ -75,20 +89,27 @@ export const AlumnoIndividual = () => {
               <p>
                 Fecha de nacimiento: <b>{store.alumno[0]?.fechanacimiento}</b>
               </p>
-              <p>Mutualista: <b>{store.mutualista.nombre}</b></p>
-              <p>Médicamentos: <b>{store.alumno[0]?.medicacion}</b></p> 
-              <p>Mensualidad: <b style={{color: "red"}}>$ {store.alumno[0]?.cuotasInfo.precio}</b></p> 
+              <p>
+                Mutualista: <b>{store.mutualista.nombre}</b>
+              </p>
+              <p>
+                Médicamentos: <b>{store.alumno[0]?.medicacion}</b>
+              </p>
+              <p>
+                Mensualidad:{" "}
+                <b style={{ color: "red" }}>
+                  $ {store.alumno[0]?.cuotasInfo.precio}
+                </b>
+              </p>
             </div>
-
           </div>
         </div>
 
         <hr />
-<br />
-        <h3 style={{ marginBottom: "25px"}}>
+        <br />
+        <h3 style={{ marginBottom: "25px" }}>
           Mensualidades abonadas
         </h3>
-        
 
         <div style={{ marginTop: "35px" }}>
           <table className="table" style={{ color: "white" }}>
@@ -101,31 +122,18 @@ export const AlumnoIndividual = () => {
                 {/* <th scope="col"></th> */}
               </tr>
             </thead>
-            {/* <tbody>
-              {store.mutualistas.map((item, id) => ( 
+            <tbody>
+              {store.pagos.map((item, id) => (
                 <tr key={id}>
-                  <td>{item.nombre}</td>
-                  <td>{item.direccion}</td>
-                  <td>{item.telefono}</td>
-                  <td>
-                    <Link to={"/ModificarMutualista/" + item.id} style={{color: "white"}}> 
-                      <i className="fa fa-pen"></i>
-                     </Link>
-                  </td>
-                  <td>
-                    <i
-                      className="fa fa-trash"
-                     onClick={(e) => borrar(e, item.id)}
-                    >
-                    </i>
-                  </td>
+                  <td>{item.fechapago}</td>
+                  <td>$ {item.monto}</td>
+                  <td>{item.factura}</td>
+                  <td>{item.metodosInfo.tipo}</td>
                 </tr>
               ))}
-            </tbody> */}
+            </tbody>
           </table>
         </div>
-     
- 
       </div>
     </>
   );
