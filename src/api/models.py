@@ -297,6 +297,10 @@ class Productos(db.Model):
             "video": self.video,
             "proveedorid": self.proveedorid,
         }
+    
+    def serializeProveedor(self):
+        results = Proveedores.query.filter_by(id = self.proveedorid).first()
+        return {"proveedorInfo": results.serialize()}
 
 # Compras
 class Compras(db.Model):

@@ -524,3 +524,106 @@ def pago_mensualidad_id(idusuario):
         return jsonify(response_body), 400
 
     return jsonify(results), 200
+
+
+#####################################################################################
+#####################################################################################
+###                                                                               ###
+###                   PRODUCTOS                                                   ###
+###                                                                               ###
+#####################################################################################
+#####################################################################################
+# Muestra todos los productos
+@api.route('/productos', methods=['GET'])
+def getProductos():
+    products = Productos.query.all()
+    results = list(map(lambda x: {**x.serializeProveedor(), **x.serialize()}, products))
+    return jsonify(results), 200
+
+# Alta de un producto
+@api.route('/productos', methods=['POST'])
+def addProductos():
+    body = json.loads(request.data)
+
+    queryNewProducto = Productos.query.filter_by(id=body["id"]).first()
+
+    if queryNewProducto is None:
+        new_producto = Productos(
+        nombre = body ["nombre"], 
+        cantidad = body["cantidad"],
+        precioventa = body["precioventa"],
+        observaciones = body["observaciones"], 
+        foto = body["foto"],
+        video  = body["video"],
+        proveedorid =  body["proveedorid"])
+
+        db.session.add(new_producto)
+        db.session.commit()
+
+        return jsonify(new_producto.serialize()), 200
+    
+    response_body = {"msg": "Producto ya ingresado"}
+    return jsonify(response_body), 400
+
+# Elimina un producto
+@api.route('/productos/<int:productos_id>', methods=['DELETE'])
+def deleteProducto(productos_id):
+    producto = Productos.query.filter_by(id=productos_id).first()
+  
+    if producto is None: 
+        response_body = {"msg": "Producto no encontrado"}
+        return jsonify(response_body), 400
+
+    db.session.delete(producto)
+    db.session.commit()
+
+    response_body = {"msg": "Producto borrado"}
+    return jsonify(response_body), 200 
+
+# Modifica un producto por id
+@api.route('/productos/<int:producto_id>', methods=['PUT'])
+def productoModif_porId(producto_id):
+    producto = Productos.query.filter_by(id=producto_id).first()
+    body = json.loads(request.data)
+
+    if producto is None:
+        response_body = {"msg": "No existe el producto"}
+        return jsonify(response_body), 400    
+
+    if "nombre" in body: 
+        producto.nombre = body["nombre"]
+
+    if "cantidad" in body: 
+        producto.cantidad = body["cantidad"]
+    
+    if "precioventa" in body: 
+        producto.precioventa = body["precioventa"]
+    
+    if "observaciones" in body:
+        producto.observaciones = body["observaciones"]
+    
+    if "foto" in body:
+        producto.foto = body["foto"]
+    
+    if "video" in body:
+        producto.video  = body["video"]
+    
+    if "proveedorid" in body:
+        producto.proveedorid =  body["proveedorid"]
+
+    db.session.commit()
+
+    response_body = {"msg": "Producto modificado"}
+    return jsonify(response_body), 200
+
+# Muestra el producto por id
+@api.route('/productos/<int:producto_id>', methods=['GET'])
+def get_productoid(producto_id):
+    products = Productos.query.filter_by(id=producto_id).all()
+    results = list(map(lambda x: {**x.serializeProveedor(), **x.serialize()}, products))
+
+    if results is None: 
+        response_body = {"msg": "Producto no encontrado"}
+        return jsonify(response_body), 400
+
+    return jsonify(results), 200
