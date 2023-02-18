@@ -16,6 +16,8 @@ const getState = ({ getStore, getActions, setStore }) => {
       pagos: [],
       producto: {},
       productos: [],
+      proveedores: [],
+      proveedor: {},
     },
     actions: {
       ////////////////////////////////////
@@ -692,7 +694,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       },
 
       // Obtener products por id
-      obtenerProdcutosId: async (id) => {
+      obtenerProductosId: async (id) => {
         try {
           const response = await axios.get(
             direccion + "/api/productos/" + id,
@@ -723,6 +725,23 @@ const getState = ({ getStore, getActions, setStore }) => {
         setStore({
           productos: resultados,
         });
+      },
+
+      ////////////////////////////////////
+      //       Proveedores             ///
+      ////////////////////////////////////
+      /* Listar proveedores */
+      obtenerProveedores: async () => {
+        try {
+          const response = await axios.get(direccion + "/api/proveedores", {});
+          setStore({
+            proveedores: response.data,
+          });
+        } catch (error) {
+          if (error.code === "ERR_BAD_REQUEST") {
+            console.log(error.response.data.msg);
+          }
+        }
       },
 
       ////////////////////////////////////

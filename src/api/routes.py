@@ -545,25 +545,19 @@ def getProductos():
 def addProductos():
     body = json.loads(request.data)
 
-    queryNewProducto = Productos.query.filter_by(id=body["id"]).first()
+    new_producto = Productos(
+    nombre = body ["nombre"], 
+    cantidad = body["cantidad"],
+    precioventa = body["precioventa"],
+    observaciones = body["observaciones"], 
+    foto = body["foto"],
+    video  = body["video"],
+    proveedorid =  body["proveedorid"])
 
-    if queryNewProducto is None:
-        new_producto = Productos(
-        nombre = body ["nombre"], 
-        cantidad = body["cantidad"],
-        precioventa = body["precioventa"],
-        observaciones = body["observaciones"], 
-        foto = body["foto"],
-        video  = body["video"],
-        proveedorid =  body["proveedorid"])
+    db.session.add(new_producto)
+    db.session.commit()
 
-        db.session.add(new_producto)
-        db.session.commit()
-
-        return jsonify(new_producto.serialize()), 200
-    
-    response_body = {"msg": "Producto ya ingresado"}
-    return jsonify(response_body), 400
+    return jsonify(new_producto.serialize()), 200
 
 # Elimina un producto
 @api.route('/productos/<int:productos_id>', methods=['DELETE'])
@@ -626,4 +620,18 @@ def get_productoid(producto_id):
         response_body = {"msg": "Producto no encontrado"}
         return jsonify(response_body), 400
 
+    return jsonify(results), 200
+
+#####################################################################################
+#####################################################################################
+###                                                                               ###
+###                   PROVEEDORES                                                 ###
+###                                                                               ###
+#####################################################################################
+#####################################################################################
+# Muestra todos los proveedores
+@api.route('/proveedores', methods=['GET'])
+def getProveedores():
+    proveedores = Proveedores.query.all()
+    results = list(map(lambda x: x.serialize(), proveedores))
     return jsonify(results), 200
