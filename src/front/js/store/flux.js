@@ -693,7 +693,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
 
-      // Obtener products por id
+      // Obtener productos por id
       obtenerProductosId: async (id) => {
         try {
           const response = await axios.get(
@@ -710,7 +710,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
 
-      // Buscador de Mensualidad
+      // Buscador de Productos
       buscadorProductos: (valor) => {
         let store = getStore();
         let resultados = store.productos.filter((item) => {
@@ -742,6 +742,103 @@ const getState = ({ getStore, getActions, setStore }) => {
             console.log(error.response.data.msg);
           }
         }
+      },
+
+      /* Agregar Proveedores */
+      crearProveedores: async (
+        nombre,
+        rut,
+        direccionProveedor,
+        telefono,
+        mail,
+        observaciones
+      ) => {
+        try {
+          await axios.post(direccion + "/api/proveedores", {
+            nombre: nombre,
+            rut: rut,
+            direccion: direccionProveedor,
+            telefono: telefono,
+            mail: mail,
+            observaciones: observaciones,
+          });
+          return true;
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+      /* Borrar Proveedores */
+      borrarProveedores: async (id) => {
+        try {
+          await axios.delete(direccion + "/api/proveedores/" + id, {});
+          getActions().obtenerProveedores();
+          return true;
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+      // Modificar productos
+      modificarProductos: async (
+        id,
+        nombre,
+        rut,
+        direccionProveedor,
+        telefono,
+        mail,
+        observaciones
+      ) => {
+        try {
+          await axios.put(direccion + "/api/proveedores/" + id, {
+            id: id,
+            nombre: nombre,
+            rut: rut,
+            direccion: direccionProveedor,
+            telefono: telefono,
+            mail: mail,
+            observaciones: observaciones
+          });
+          return true;
+        } catch (error) {
+          if (error.code === "ERR_BAD_REQUEST") {
+            console.log(error.response.data.msg);
+          }
+        }
+      },
+
+      // Obtener proveedor por id
+      obtenerProveedorId: async (id) => {
+        try {
+          const response = await axios.get(
+            direccion + "/api/proveedores/" + id,
+            {},
+          );
+          setStore({
+            proveedor: response.data,
+          });
+        } catch (error) {
+          if (error.code === "ERR_BAD_REQUEST") {
+            console.log(error.response.data.msg);
+          }
+        }
+      },
+
+      // Buscador de Proveedores
+      buscadorProveedor: (valor) => {
+        let store = getStore();
+        let resultados = store.proveedor.filter((item) => {
+          if (
+            item.nombre.toString().toLowerCase().includes(
+              valor.toLowerCase(),
+            )
+          ) {
+            return valor;
+          }
+        });
+        setStore({
+          proveedores: resultados,
+        });
       },
 
       ////////////////////////////////////

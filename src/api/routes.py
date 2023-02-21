@@ -635,3 +635,82 @@ def getProveedores():
     proveedores = Proveedores.query.all()
     results = list(map(lambda x: x.serialize(), proveedores))
     return jsonify(results), 200
+
+# Alta de un proveedor
+@api.route('/proveedores', methods=['POST'])
+def addProveedores():
+    body = json.loads(request.data)
+
+    new_proveedor = Proveedores(
+    nombre = body ["nombre"], 
+    rut = body["rut"],
+    direccion = body["direccion"],
+    telefono = body["telefono"],
+    mail  = body["mail"],
+    observaciones = body["observaciones"])
+
+    db.session.add(new_proveedor)
+    db.session.commit()
+
+    return jsonify(new_proveedor.serialize()), 200
+
+# Elimina un proveedor
+@api.route('/proveedores/<int:proveedor_id>', methods=['DELETE'])
+def deleteProveedor(proveedor_id):
+    proveedor = Proveedores.query.filter_by(id=proveedor_id).first()
+  
+    if proveedor is None: 
+        response_body = {"msg": "Proveedor no encontrado"}
+        return jsonify(response_body), 400
+
+    db.session.delete(proveedor)
+    db.session.commit()
+
+    response_body = {"msg": "Proveedor borrado"}
+    return jsonify(response_body), 200 
+
+
+# Modifica un proveedor por id
+@api.route('/proveedores/<int:proveedores_id>', methods=['PUT'])
+def proveedorModif_porId(proveedores_id):
+    proveedor = Proveedores.query.filter_by(id=proveedores_id).first()
+    body = json.loads(request.data)
+
+    if proveedor is None:
+        response_body = {"msg": "No existe el proveedor."}
+        return jsonify(response_body), 400    
+
+    if "nombre" in body: 
+        proveedor.nombre = body["nombre"]
+
+    if "rut" in body: 
+        proveedor.rut = body["rut"]
+    
+    if "direccion" in body: 
+        proveedor.direccion = body["direccion"]
+    
+    if "telefono" in body:
+        proveedor.telefono = body["telefono"],
+    
+    if "mail" in body:
+        proveedor.mail  = body["mail"]
+    
+    if "observaciones" in body:
+        proveedor.observaciones = body["observaciones"]
+
+    db.session.commit()
+
+    response_body = {"msg": "Proveedor modificado"}
+    return jsonify(response_body), 200
+
+# Muestra el proveedor por id
+@api.route('/proveedores/<int:proveedor_id>', methods=['GET'])
+def get_proveedorid(proveedor_id):
+    proveedor = Proveedores.query.filter_by(id=proveedor_id).all()
+    results = list(map(lambda x: x.serialize(), proveedor))
+
+    if results is None: 
+        response_body = {"msg": "Proveedor no encontrado"}
+        return jsonify(response_body), 400
+
+    return jsonify(results), 200

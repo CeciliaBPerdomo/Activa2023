@@ -91,7 +91,50 @@ export const Navbar = () => {
 									<li><a className="dropdown-item" href="#">Something else here</a></li> */}
 									</ul>
 								</li>
+
+								{/* Productos */}
+								<li className="nav-item dropdown">
+									<a className="nav-link dropdown-toggle" href="#" 
+									role="button" data-bs-toggle="dropdown" aria-expanded="false"
+									style={{textDecoration: "none", color: "white"}}>
+									Productos
+									</a>
+									<ul className="dropdown-menu dropdown-menu-dark">
+									<li>
+										<Link to="/ListadoProductos" style={{textDecoration: "none", color: "white", marginLeft: "15px"}}>
+											Listado de productos
+										</Link>
+									</li>
+									<li>
+									<Link to="/CrearProductos" style={{textDecoration: "none", color: "white", marginLeft: "15px"}}>
+										Agregar productos
+									</Link>
+									</li>
+			
+									</ul>
+								</li>
 								
+								{/* Proveedores */}
+								<li className="nav-item dropdown">
+									<a className="nav-link dropdown-toggle" href="#" 
+									role="button" data-bs-toggle="dropdown" aria-expanded="false"
+									style={{textDecoration: "none", color: "white"}}>
+									Proveedores
+									</a>
+									<ul className="dropdown-menu dropdown-menu-dark">
+									<li>
+										<Link to="/ListadoProveedores" style={{textDecoration: "none", color: "white", marginLeft: "15px"}}>
+											Listado de proveedores
+										</Link>
+									</li>
+									<li>
+									<Link to="/CrearProveedor" style={{textDecoration: "none", color: "white", marginLeft: "15px"}}>
+										Agregar proveedores
+									</Link>
+									</li>
+			
+									</ul>
+								</li>
 
 							</ul>
 						</div>

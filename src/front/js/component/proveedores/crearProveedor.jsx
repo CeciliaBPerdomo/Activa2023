@@ -4,34 +4,27 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export const CrearProductos = () => {
+export const CrearProveedor = () => {
   const { store, actions } = useContext(Context);
-  let navegacion = useNavigate();
-
+  
   const [nombre, setNombre] = useState("");
-  const [cantidad, setCantidad] = useState("");
-  const [precioVenta, setPrecioVenta] = useState("");
-  const [foto, setFoto] = useState("");
-  const [video, setVideo] = useState("");
+  const [rut, setRut] = useState("")
+  const [direccion, setDireccion] = useState("")
+  const [telefono, setTelefono] = useState("")
+  const [email, setEmail] = useState("")
   const [observaciones, setObservaciones] = useState("")
-  const [proveedor, setProveedor] = useState("")
-
-  useEffect(() => {
-    actions.obtenerProveedores();
-  }, []);
 
   const guardar = (e) => {
     e.preventDefault();
 
     if (
-      actions.crearProductos(
+      actions.crearProveedores(
         nombre,
-        cantidad,
-        precioVenta,
-        observaciones,
-        foto,
-        video,
-        proveedor,
+        rut,
+        direccion,
+        telefono,
+        email,
+        observaciones
       )
     ) {
       toast.success("💪 Guardado con éxito", {
@@ -47,22 +40,19 @@ export const CrearProductos = () => {
     }
 
     setNombre("")
-    setCantidad("")
-    setPrecioVenta("")
+    setRut("")
+    setDireccion("")
     setObservaciones("")
-    setFoto("")
-    setVideo("")
-    setProveedor("")
-    // setInterval(() => {
-    //   navegacion("/ListadoAlumnos");
-    // }, 5000);
+    setEmail("")
+    setTelefono("")
+   
   };
 
   return (
     <>
       <div className="container">
         <h3 style={{ marginBottom: "15px" }}>
-          Ingresar un nuevo productos
+          Ingresar un nuevo proveedor
         </h3>
         <hr />
         <br />
@@ -83,84 +73,68 @@ export const CrearProductos = () => {
               />
             </div>
 
-            {/* Cantidad */}
+            {/* RUT */}
             <div className="col">
-              <label htmlFor="cantidad" style={{ marginBottom: "10px" }}>
-                Cantidad:
+              <label htmlFor="RUT" style={{ marginBottom: "10px" }}>
+                RUT:
               </label>
               <input
                 type="text"
                 className="form-control"
-                placeholder="Cantidad"
-                value={cantidad}
-                onChange={(e) => setCantidad(e.target.value)}
-              />
-            </div>
-
-            {/* Precio venta */}
-            <div className="col">
-              <label htmlFor="precio" style={{ marginBottom: "10px" }}>
-                Precio de venta:
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Precio de venta"
-                value={precioVenta}
-                onChange={(e) => setPrecioVenta(e.target.value)}
+                placeholder="RUT"
+                value={rut}
+                onChange={(e) => setRut(e.target.value)}
               />
             </div>
           </div>
 
           <br />
           <div className="row">
-            {/* Foto */}
-            <div className="col">
-              <label htmlFor="nombre" style={{ marginBottom: "10px" }}>
-                Foto URL:
+
+             {/* Direccion */}
+             <div className="col">
+              <label htmlFor="direccion" style={{ marginBottom: "10px" }}>
+                Dirección:
               </label>
               <input
                 type="text"
                 className="form-control"
-                placeholder="URL de la foto"
-                value={foto}
-                onChange={(e) => setFoto(e.target.value)}
+                placeholder="Dirección"
+                value={direccion}
+                onChange={(e) => setDireccion(e.target.value)}
               />
             </div>
 
-            {/* Video */}
+            {/* Telefono */}
             <div className="col">
-              <label htmlFor="cantidad" style={{ marginBottom: "10px" }}>
-                Video:
+              <label htmlFor="telefono" style={{ marginBottom: "10px" }}>
+                Teléfono:
               </label>
               <input
                 type="text"
                 className="form-control"
-                placeholder="URL del video"
-                value={video}
-                onChange={(e) => setVideo(e.target.value)}
+                placeholder="Teléfono"
+                value={telefono}
+                onChange={(e) => setTelefono(e.target.value)}
               />
             </div>
           </div>
 
           <br />
           <div className="row">
-            {/* Provedor */}
+
+            {/* Email */}
             <div className="col">
-              <label htmlFor="proveedor" style={{ marginBottom: "10px" }}>
-                Proveedor:
+              <label htmlFor="email" style={{ marginBottom: "10px" }}>
+                Correo electrónico:
               </label>
-              <select
-                className="form-select"
-                aria-label="Default select example"
-                value={proveedor}
-                onChange={(e) => setProveedor(e.target.value)}
-              >
-                <option selected>Proveedor</option>
-                {store.proveedores.map((item, id) => (
-                  <option key={id} value={item.id}>{item.nombre}</option>
-                ))}
-              </select>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Correo electrónico"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
 
             {/* Observaciones */}
@@ -188,7 +162,8 @@ export const CrearProductos = () => {
             </button>
           </div>
         </form>
-      </div>
+    
+        </div>
       <ToastContainer />
       <br />
     </>

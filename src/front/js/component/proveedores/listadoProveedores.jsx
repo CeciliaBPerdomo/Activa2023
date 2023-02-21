@@ -4,19 +4,19 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export const ListadoProductos = () => {
+export const ListadoProveedores = () => {
   const { store, actions } = useContext(Context);
   let navegacion = useNavigate();
 
   const [busqueda, setBusqueda] = useState("");
 
   useEffect(() => {
-    actions.obtenerProductos();
+    actions.obtenerProveedores();
   }, []);
 
   const borrar = (e, id) => {
     e.preventDefault();
-    if (actions.borrarProductos(id)) {
+    if (actions.borrarProveedores(id)) {
       toast.error("🤚 Borrado con éxito", {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 3000,
@@ -30,6 +30,7 @@ export const ListadoProductos = () => {
     }
   };
 
+
   return (
     <>
       <div className="container">
@@ -37,7 +38,7 @@ export const ListadoProductos = () => {
           <input
             type="text"
             className="form-control "
-            placeholder="🔎 Buscar producto..."
+            placeholder="🔎 Buscar proveedor..."
             // onChange={(e) => setBusqueda(e.target.value)}
             // value={busqueda}
           />
@@ -51,31 +52,33 @@ export const ListadoProductos = () => {
           </button>
         </div>
 
-        <h3 style={{ marginBottom: "25px" }}>Productos</h3>
+        <h3 style={{ marginBottom: "25px" }}>Proveedores</h3>
         <hr />
         <br />
 
-        {/* Listado de productos */}
-        <div style={{ marginTop: "35px" }}>
+      {/* Listado de productos */}
+      <div style={{ marginTop: "35px" }}>
           <table className="table" style={{ color: "white" }}>
             <thead>
               <tr>
                 <th scope="col">Nombre</th>
-                <th scope="col" className="text-center">Cantidad</th>
-                <th scope="col" className="text-center">Precio</th>
-                <th scope="col">Proveedor</th>
+                <th scope="col">RUT</th>
+                <th scope="col">Dirección</th>
+                <th scope="col">Teléfono</th>
+                <th scope="col">Mail</th>
                 <th scope="col" className="text-center">+ Info</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
-              {store.productos.map((item, id) => (
+              {store.proveedores.map((item, id) => (
                 <tr key={id}>
                   <td>{item.nombre}</td>
-                  <td className="text-center">{item.cantidad}</td>
-                  <td className="text-center">$ {item.precioventa}</td>
-                  <td>{item.proveedorInfo.nombre}</td>
+                  <td>{item.rut}</td>
+                  <td>{item.direccion}</td>
+                  <td>{item.telefono}</td>
+                  <td>{item.mail}</td>
                   <td className="text-center">
                     <Link
                       to={"/ProductoDetalle/" + item.id}
@@ -105,7 +108,7 @@ export const ListadoProductos = () => {
           </table>
         </div>
       
-      </div>
+        </div>
       <ToastContainer />
       <br />
     </>
