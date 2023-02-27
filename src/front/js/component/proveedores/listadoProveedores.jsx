@@ -81,7 +81,7 @@ export const ListadoProveedores = () => {
                   <td>{item.mail}</td>
                   <td className="text-center">
                     <Link
-                      to={"/ProductoDetalle/" + item.id}
+                      to={"/ProveedorDetalle/" + item.id}
                       style={{ color: "white" }}
                     >
                       <i className="fa fa-eye"></i>
@@ -89,7 +89,7 @@ export const ListadoProveedores = () => {
                   </td>
                   <td>
                     <Link
-                      to={"/ModificarProductos/" + item.id}
+                      to={"/ModificarProveedor/" + item.id}
                       style={{ color: "white" }}
                     >
                       <i className="fa fa-pen"></i>

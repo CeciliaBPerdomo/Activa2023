@@ -42,6 +42,8 @@ import { ProductoDetalle } from "./component/productos/productoDetalle.jsx"
 // Proveedores
 import { ListadoProveedores } from "./component/proveedores/listadoProveedores.jsx"
 import { CrearProveedor } from "./component/proveedores/crearProveedor.jsx"
+import { ProveedorDetalle } from "./component/proveedores/ProveedorDetalle.jsx"
+import { ModificarProveedor } from "./component/proveedores/modificarProveedor.jsx"
 
 //create your first component
 const Layout = () => {
@@ -90,6 +92,8 @@ const Layout = () => {
                         {/* Proveedores */}
                         <Route element={< ListadoProveedores />} path ="/ListadoProveedores" />
                         <Route element={< CrearProveedor />} path="/CrearProveedor" />
+                        <Route element={< ProveedorDetalle />} path="/ProveedorDetalle/:theid" />
+                        <Route element={< ModificarProveedor />} path ="/ModificarProveedor/:theid" />
 
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>

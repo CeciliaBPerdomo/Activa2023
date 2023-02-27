@@ -690,7 +690,7 @@ def proveedorModif_porId(proveedores_id):
         proveedor.direccion = body["direccion"]
     
     if "telefono" in body:
-        proveedor.telefono = body["telefono"],
+        proveedor.telefono = body["telefono"]
     
     if "mail" in body:
         proveedor.mail  = body["mail"]

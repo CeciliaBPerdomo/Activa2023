@@ -779,8 +779,8 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
 
-      // Modificar productos
-      modificarProductos: async (
+      // Modificar proveedores
+      modificarProveedores: async (
         id,
         nombre,
         rut,
