@@ -30,6 +30,14 @@ export const ListadoProveedores = () => {
     }
   };
 
+// Buscador
+const buscar = async (valor) => {
+  if (busqueda === "") {
+      actions.obtenerProveedores();
+   } else {
+      await actions.obtenerProveedorId(valor);
+   }
+};
 
   return (
     <>
@@ -39,14 +47,14 @@ export const ListadoProveedores = () => {
             type="text"
             className="form-control "
             placeholder="🔎 Buscar proveedor..."
-            // onChange={(e) => setBusqueda(e.target.value)}
-            // value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            value={busqueda}
           />
           <button
             className="btn btn-outline-danger"
             type="button"
             id="button-addon2"
-            // onClick={(e) => buscar(busqueda)}
+            onClick={(e) => buscar(busqueda)}
           >
             Buscar
           </button>

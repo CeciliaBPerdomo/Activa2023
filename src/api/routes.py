@@ -714,3 +714,28 @@ def get_proveedorid(proveedor_id):
         return jsonify(response_body), 400
 
     return jsonify(results), 200
+
+#####################################################################################
+#####################################################################################
+###                                                                               ###
+###                   PAGO PROVEEDORES                                            ###
+###                                                                               ###
+#####################################################################################
+#####################################################################################
+# Alta de un pago de proveedor
+@api.route('/pagoproveedores', methods=['POST'])
+def addPagoProveedores():
+    body = json.loads(request.data)
+
+    new_pagoproveedor = Pagoproveedores(
+    fechapago = body ["fechapago"], 
+    numfactura = body["numfactura"],
+    monto = body["monto"],
+    observaciones = body["observaciones"],
+    idproveedor = body["idproveedor"],
+    idmetodo  = body["idmetodo"])
+
+    db.session.add(new_pagoproveedor)
+    db.session.commit()
+
+    return jsonify(new_pagoproveedor.serialize()), 200

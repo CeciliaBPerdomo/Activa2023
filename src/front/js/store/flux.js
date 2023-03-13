@@ -751,7 +751,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         direccionProveedor,
         telefono,
         mail,
-        observaciones
+        observaciones,
       ) => {
         try {
           await axios.post(direccion + "/api/proveedores", {
@@ -787,7 +787,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         direccionProveedor,
         telefono,
         mail,
-        observaciones
+        observaciones,
       ) => {
         try {
           await axios.put(direccion + "/api/proveedores/" + id, {
@@ -797,7 +797,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             direccion: direccionProveedor,
             telefono: telefono,
             mail: mail,
-            observaciones: observaciones
+            observaciones: observaciones,
           });
           return true;
         } catch (error) {
@@ -841,6 +841,34 @@ const getState = ({ getStore, getActions, setStore }) => {
         });
       },
 
+      ////////////////////////////////////
+      //       Pago Proveedores        ///
+      ////////////////////////////////////
+      /* Agregar Pago Proveedores */
+      crearPagoProveedores: async (
+        fechapago,
+        numfactura,
+        monto,
+        idproveedor,
+        idmetodo,
+        observaciones,
+      ) => {
+        try {
+          await axios.post(direccion + "/api/pagoproveedores", {
+            fechapago: fechapago,
+            numfactura: numfactura,
+            monto: monto,
+            idproveedor: idproveedor,
+            idmetodo: idmetodo,
+            observaciones: observaciones,
+          });
+          return true;
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+      
       ////////////////////////////////////
       //       Por defecto             ///
       ////////////////////////////////////
